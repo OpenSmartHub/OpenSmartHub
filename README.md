@@ -1,4 +1,5 @@
-# OASH (Open source Automated Smart Home)
+# OASH
+# (Open source Automated Smart Home)
 Open source cloud based hub with abilities to connect to any internet connected device!
 
 # One hub to rule them all!
@@ -15,8 +16,10 @@ Still being developed
 ## Why do I care?
 If you don't plan on having a cool house (you don't). If you don't have other devices in your home like a Nest, WeMo, etc. (you don't yet)However! If you've got enough things on your mind and want to let your house handle itself, you definitely will care! Combine all your home devices under one hub that will rule them all.
 
-## The Future
+# I want to use it!
+1. Rename public_config.js to config.js and replace it's contents with your configuration credentials.
 
+## The Future
 * Community Growth! The more people that automate devices based on the hub and come up with recipes, the more robust the functionality will be!
 * Tie into nest api as a device or get their temperature settings. And wemo or smart things to integrate into their systems.
 * App that will automatically turn on security mode when you are away.
