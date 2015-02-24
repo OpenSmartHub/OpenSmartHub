@@ -1,3 +1,6 @@
+// This is based off of the http://www.hackster.io/anthony-ngu/spark-rgb ino code
+// as well as the sparkButton.ino code provided in the root of this repo
+
 var sparkRGB = require('./devices/spark/sparkRGB.js');
 
 var inputOn = '048,255,255,255,100,100,100,100,100';

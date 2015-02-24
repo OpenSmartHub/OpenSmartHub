@@ -1,3 +1,5 @@
+// This is based off of the http://www.hackster.io/anthony-ngu/spark-rgb ino code
+
 exports.toggleLight = function (device, input){
   if(device.connected == true)
   {
