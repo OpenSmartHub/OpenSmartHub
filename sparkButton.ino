@@ -17,10 +17,10 @@ void loop() {
         lit = !lit;
         if(lit)
         {
-            Spark.publish("button", "triggeredOn"); // this will send the event to anyone subscribed to it
+            Spark.publish("button", "triggeredOn", 60, PRIVATE); // this will send the event to anyone subscribed to it
             digitalWrite(led, HIGH);
         }else{
-            Spark.publish("button", "triggeredOff");
+            Spark.publish("button", "triggeredOff", 60, PRIVATE);
             digitalWrite(led, LOW);
         }
         delay(500); // debounce
