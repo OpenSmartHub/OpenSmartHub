@@ -44,6 +44,11 @@ var TimedWemoSwitch = function(cp, wemo_device_name, timeout_duration)
           }
         }
       }
+      // check if wemoDevice was not found (if not, log it)
+      if(!wemoDevice)
+      {
+        console.log("WeMo Device " + wemo_device_name + "not found.");        
+      }
     }
   }); // needs to be the name of a generic function
   cp.search();

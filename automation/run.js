@@ -6,6 +6,7 @@ var WemoControlPoint = require('./automation_modules/devices/wemo/wemoInit.js').
 var SparkButtonToSparkRGB = require('./automation_modules/sparkButtonToSparkRGB.js').SparkButtonToSparkRGB;
 var SparkButtonToWemoSwitch = require('./automation_modules/sparkButtonToWemoSwitch.js').SparkButtonToWemoSwitch;
 var TimedWemoSwitch = require('./automation_modules/timedWemoSwitch.js').TimedWemoSwitch;
+var SparkMotionToWemoSwitch = require('./automation_modules/sparkMotionToWemoSwitch.js').SparkMotionToWemoSwitch;
 
 // Global Hub Variables
 var storedWeatherData = {
@@ -35,7 +36,8 @@ weatherUnderground.getWeatherUndergroundData(); // Polls for the Weather from We
 setInterval(function() { // Polls for the Weather from WeatherUnderground every 15 minutes
   weatherUnderground.getWeatherUndergroundData();
 }, 900000);
-var sparkButtonToSparkRGB1 = new SparkButtonToSparkRGB(spark, 1, 0);
-var sparkButtonToWemoSwitch1 = new SparkButtonToWemoSwitch(WemoControlPoint, spark, 1, config.WEMO_SWITCH_NAME1);
-var timedWemoSwitch1 = new TimedWemoSwitch(WemoControlPoint, config.WEMO_SWITCH_NAME1, 1000);
-var timedWemoSwitch2 = new TimedWemoSwitch(WemoControlPoint, config.WEMO_SWITCH_NAME2, 1000);
+var sparkMotionToWemoSwitch1 = new SparkMotionToWemoSwitch(WemoControlPoint, spark, 1, config.WEMO_SWITCH_NAME1);
+// var sparkButtonToSparkRGB1 = new SparkButtonToSparkRGB(spark, 1, 0);
+// var sparkButtonToWemoSwitch1 = new SparkButtonToWemoSwitch(WemoControlPoint, spark, 1, config.WEMO_SWITCH_NAME1);
+// var timedWemoSwitch1 = new TimedWemoSwitch(WemoControlPoint, config.WEMO_SWITCH_NAME1, 1000);
+// var timedWemoSwitch2 = new TimedWemoSwitch(WemoControlPoint, config.WEMO_SWITCH_NAME2, 1000);

@@ -1,3 +1,5 @@
+// This is based off of the http://www.hackster.io/anthony-ngu/spark-rgb ino code
+// as well as the sparkButton.ino code provided in the root of this repo
 var wemo = require("./devices/wemo/lib/wemo");
 
 // This does a timed call to your wemo device to change the value
@@ -11,11 +13,11 @@ var triggerWeMo = function(device, value)
   }
 }
 
-// this handles the setup of event logic
-exports.SparkButtonToWemoSwitch = function(cp, spark, spark_button_num, wemo_device_name)
+exports.SparkMotionToWemoSwitch = function(cp, spark, spark_motion_num, wemo_device_name)
 {
   var wemoResponseDevices = cp.devices; // the response from call to look up your network
   var wemoDevice; // handle to the wemo device you specified
+  var wemoState = 0;
 
   cp.on("device", function(device){
     if(!wemoDevice) // to prevent repetitive device registrations
@@ -26,16 +28,34 @@ exports.SparkButtonToWemoSwitch = function(cp, spark, spark_button_num, wemo_dev
         cp.devices[tempDevice].deviceType == wemo.WemoControllee.deviceType) // This checks to see if it is a switch
         {
           wemoDevice = new wemo.WemoControllee(cp.devices[tempDevice]); // handle to the wemo device you specified
-          spark.on('login', function() {
-            spark.listDevices().then(function(devices)
+         
+          // this measures the current state of the WeMo Switch so that it does not send multiple needless messages to it
+          if (wemoDevice.eventService) {
+            wemoDevice.eventService.on("stateChange", function(value)
             {
-              devices[spark_button_num].onEvent('button', function(data) {
+              if (value["BinaryState"] == "1") // this will signal when the value has been set to one (aka turned on)
+              {
+                wemoState = 1;
+              }
+              else if (value["BinaryState"] == "0")
+              {
+                wemoState = 0;
+              }
+            });
+            wemoDevice.eventService.subscribe(function(err, data) {
+              //
+            });
+          }
+
+          spark.on('login', function() {
+            spark.listDevices().then(function(devices) {
+              devices[spark_motion_num].onEvent('motion', function(data) {
                 if(data != null)
                 {
-                  if(data.data == "triggeredOn")
+                  if(data.data == "1" && wemoState == 0)
                   {
                     triggerWeMo(wemoDevice, true);
-                  }else{
+                  }else if(data.data == "0" && wemoState == 1){
                     triggerWeMo(wemoDevice, false);
                   }
                 }
@@ -47,7 +67,7 @@ exports.SparkButtonToWemoSwitch = function(cp, spark, spark_button_num, wemo_dev
       // check if wemoDevice was not found (if not, log it)
       if(!wemoDevice)
       {
-        console.log("WeMo Device " + wemo_device_name + "not found.");        
+        console.log("WeMo Device \"" + wemo_device_name + "\" not found.");        
       }
     }
   });
