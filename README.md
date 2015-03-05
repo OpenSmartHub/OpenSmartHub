@@ -1,8 +1,9 @@
 # Open source Home Hub
 
 ### Currently Supported Devices:
-* Spark maker projects
+* Spark maker projects (Button, Motion, RGB Strip)
 * WeMo (if the hub is run on a local network)
+* WeatherUnderground APIs for local astronomical and weather forecasts
 
 ### Near Future:
 * WeMo (through the cloud hub)
@@ -56,6 +57,9 @@ Note: In the case of the buttonToLight script, Spark devices can publish events 
 * App that will automatically turn on security mode when you are away.
 * Get data from multiple spark cores like temperature in your house or motion and toggle multiple devices based off of spark too.
 * Touch LCD for toggling on a hub device in your home.
+
+# How is it different?
+There are other open source automation projects but can you easily use it, alter it, and add more functionality? **The key to the Open source Home Hub is that it is designed to be simple. Easily follow step by step directions to get it set up and contribute! No need to read pages and pages of documentation to get started!**
 
 Note:
 The wemo devices folder is a submodule based off of [Stormboy's node-upnp-controlpoint](https://github.com/stormboy/node-upnp-controlpoint)
