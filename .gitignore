@@ -27,4 +27,6 @@ node_modules
 # Users Environment Variables
 .lock-wscript
 
-automation/config.js
+config.js
+*.zip
+*.bin
