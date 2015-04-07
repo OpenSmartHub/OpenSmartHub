@@ -26,15 +26,20 @@ It uses Azure Websites, Azure WebJobs, WeatherUnderground API, Express, Node.js,
 # I want to use it!
 Awesome! Here are the steps to set up your own private server hosted in the cloud!
 
-### Option 1: (Use Azure for a website and home hub you can access from anywhere)
-1. Open an Azure account and create a free website (this will be the host for your home hub)
-2. Feel free to add Authentication to this site before you add any content to it (that way only you and a select few can access your data)
-2. Download this repo!
-3. Open and edit run.js under the automation folder and pick and choose the functionality you want. For more info on how this is set up, scroll down to the Smart Home Modules section. (Note: You need the spark module in your root node_module directory in order to run spark code on the server!)
-4. Rename public_config.js to config.js and replace it's contents with your configuration credentials.
-5. Zip the "automation_module" folder, config.js, and run.js into one zip file and add it to the WebJobs on your Azure Website. (If you want it to truly run continuously, you will need to upgrade your website from Shared or Free to Basic or Standard)
+### Option 1: (Split Hub)
+Use Azure for a website and home hub that you can access from anywhere with a local component to communicate with locally connected devices.
 
-### Option 2: (Use any computer or micro-controller with node.js capabilities for a local network hub)
+0. Open an Azure account and create a free website (this will be the host for your home hub)
+0. In the configure tab, turn on websockets (the two components communicate through this)
+0. Feel free to add Authentication to this site before you add any content to it (that way only you and a select few can access your data)
+0. Download this repo!
+0. Open and edit run.js under the automation folder and pick and choose the functionality you want. For more info on how this is set up, scroll down to the Smart Home Modules section. (Note: You need the spark module in your root node_module directory in order to run spark code on the server!)
+0. Rename public_config.js to config.js and replace it's contents with your configuration credentials.
+0. Zip the "automation_module" folder, config.js, and run.js into one zip file and add it to the WebJobs on your Azure Website. (If you want it to truly run continuously, you will need to upgrade your website from Shared or Free to Basic or Standard)
+
+### Option 2: (Combined Hub)
+Use any computer or micro-controller with node.js capabilities for a local network hub
+
 1. Install Node.js
 2. Download this repo!
 3. Open and edit run.js under the automation folder and pick and choose the functionality you want. For more info on how this is set up, scroll down to the Smart Home Modules section.
