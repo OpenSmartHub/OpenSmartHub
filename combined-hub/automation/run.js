@@ -1,8 +1,10 @@
-// Requires for Scripts
+// Required for Scripts
 var config = require('./config.js');
 var sparkInit = require('./automation_modules/devices/spark/sparkInit.js');
 var WeatherUnderground = require('./automation_modules/devices/weatherunderground/weatherundergroundInit.js').WeatherUnderground;
 var WemoControlPoint = require('./automation_modules/devices/wemo/wemoInit.js').cp; // needed to initialize the upnp module for WeMo support
+
+// Scripts
 var SparkButtonToSparkRGB = require('./automation_modules/sparkButtonToSparkRGB.js').SparkButtonToSparkRGB;
 var SparkButtonToWemoSwitch = require('./automation_modules/sparkButtonToWemoSwitch.js').SparkButtonToWemoSwitch;
 var TimedWemoSwitch = require('./automation_modules/timedWemoSwitch.js').TimedWemoSwitch;
