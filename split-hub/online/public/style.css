@@ -1,0 +1,41 @@
+body {
+  padding-top: 50px;
+}
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+.black-border{
+  border-style: solid;
+  border-width: 4px;
+  border-color: black;
+}
+.left-border{
+  border-right-width: 2px;
+}
+.right-border{
+  border-left-width: 2px;
+}
+.center-border{
+  border-left-width: 2px;
+  border-right-width: 2px;
+}
+.full-size{
+  height:100%;
+}
+.scrollable-y{
+  overflow-y: scroll;
+}
+.center{
+  text-align: center;
+}
+.odd {
+  background-color: #CCC;
+}
+.even {
+  background-color: #FFF;
+}
+.spaced-row{
+  margin-bottom: 5px;
+  margin-top: 5px;
+}

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" ng-app="ohh">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+  <script src="ohh-angular.js"></script>
+</head>
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Dashboard</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="data.html">Data</a></li>
+          <li><a href="config.html">Config</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
+
+  <div class="container">
+    <div id="activeScripts" class="col-md-6 left-border black-border full-size">
+      <h3 style="display: inline-block;">Your Active Scripts</h3>
+      <button type="button" class="btn btn-success pull-right" style="margin-top:15px;">+</button>
+      <hr/>
+      <div id="activeScriptsContent" class="row scrollable-y full-size" ng-controller="ActiveScriptContentController as activeScriptContentController">
+        <!-- Repeat -->
+        <div class="row spaced-row" ng-repeat="script in activeScriptContentController.activeScripts" ng-class-odd="'odd'" ng-class-even="'even'">
+          <div class="col-md-8 center">
+            {{script.name}}
+            <br/>
+            {{script.description}}
+          </div>
+          <div class="col-md-2 center"><button type="button" class="btn btn-primary">Edit</button></div>
+          <div class="col-md-2 center"><button type="button" class="btn btn-danger">Delete</button></div>
+        </div>
+        <!-- End of Repeat -->
+      </div>
+    </div>
+    <div id="activeDevices" class="col-md-6 right-border black-border full-size" ng-controller="ActiveDevicesController as activeDevicesController">
+      <h3 style="display: inline-block;">Your Devices</h3>
+      <button type="button" class="btn btn-success pull-right" style="margin-top:15px;">+</button>
+      <hr/>
+      <div id="devicesContent" class="row scrollable-y full-size">
+        <!-- Repeat -->
+        <div class="row spaced-row" ng-repeat="device in activeDevicesController.activeDevices" ng-class-odd="'odd'" ng-class-even="'even'">
+          <div class="col-md-8 center">
+            {{device.name}}
+            <br/>
+            {{device.description}}
+          </div>
+          <div class="col-md-2 center"><button type="button" class="btn btn-primary">Edit</button></div>
+          <div class="col-md-2 center"><button type="button" class="btn btn-danger">Delete</button></div>
+        </div>
+        <!-- End of Repeat -->
+      </div>
+    </div>
+  </div><!-- /.container -->
+
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script>
+    $('#activeScripts').css('height', $(window).height()-75);
+    $('#activeDevices').css('height', $(window).height()-75);
+  </script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</body>
+</html>
