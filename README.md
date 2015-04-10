@@ -68,3 +68,21 @@ There are other open source automation projects but can you easily use it, alter
 
 Note:
 The wemo devices folder is a submodule based off of [Stormboy's node-upnp-controlpoint](https://github.com/stormboy/node-upnp-controlpoint)
+
+// Active Script Interface
+// parameters are in order and must be placed in order
+// parameters are just keys to the vaue in a Dictionary
+{name, description, type, [parameters]}
+
+// Script Interface
+// parameters are in order and must be placed in order
+// parameters are types
+{name, description, [parameters]}
+
+// Active Device Interface
+// the parameters are strings
+// the key is linked in a Dictionary to a value
+{name, type, key, [parameters]}
+
+// Device Interface
+{name, [parameter]}
