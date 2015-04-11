@@ -6,14 +6,7 @@
   }]);
   angular
     .module('ohh')
-      .controller('ScriptController', ['$scope', 'MyJsonService', function($scope, MyJsonService) {
-        $scope.storage = MyJsonService.get();
-  }]);
-  angular
-    .module('ohh')
       .controller('ActiveScriptContentController', ['$scope', 'MyJsonService', function($scope, MyJsonService) {
-        var activeScriptsController = this;
-        activeScriptsController.activeScripts = activeScripts;
         $scope.storage = MyJsonService.get();
 
         // saving a new script
@@ -44,15 +37,8 @@
   }]);
   angular
     .module('ohh')
-      .controller('ActiveDevicesController', ['$scope', function($scope) {
-        var activeDevicesController = this;
-        activeDevicesController.activeDevices = activeDevices;
-        $.getJSON("save.json", function(data) { // gets the save file data
-          $scope.storage = data;
-          $scope.$apply(function(){ // this applies it to the page
-            activeDevicesController.activeDevices = $scope.storage.activeDevices;
-          });
-        });
+      .controller('ActiveDevicesController', ['$scope', 'MyJsonService', function($scope, MyJsonService) {
+        $scope.storage = MyJsonService.get();
 
         // saving a new devices
         $scope.createDevice = function () {

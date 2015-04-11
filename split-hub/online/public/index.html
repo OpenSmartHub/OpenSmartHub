@@ -47,8 +47,8 @@
               <div class="modal-body">
                 <div class="form-group">
                   <label for="name">Script Type</label>
-                  <select class="form-control" ng-controller="ScriptController as scriptController">
-                    <option ng-repeat="script in storage.scripts">{{script.name}}</option>
+                  <select class="form-control">
+                    <option ng-repeat="(id, script) in storage.scripts">{{id}}</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -59,7 +59,7 @@
                   <label for="description">Description</label>
                   <input type="text" class="form-control" id="description" placeholder="Enter Description">
                 </div>
-                Add fields for parameters
+                Add fields for parameters based on the selection above (dynamically)
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -74,11 +74,11 @@
       <hr/>
       <div id="activeScriptsContent" class="row scrollable-y full-size">
         <!-- Repeat -->
-        <div class="row spaced-row" ng-repeat="script in storage.activeScripts" ng-class-odd="'odd'" ng-class-even="'even'">
+        <div class="row spaced-row" ng-repeat="(id, script) in storage.activeScripts" ng-class-odd="'odd'" ng-class-even="'even'">
           <div class="col-md-8 center">
-            {{script.name}}
+            {{id}}
             <br/>
-            {{script.description}}
+            {{script.type}}
           </div>
           <div class="col-md-2 center"><button type="button" class="btn btn-primary">Edit</button></div>
           <div class="col-md-2 center"><button type="button" class="btn btn-danger" ng-click="deleteScript(script)">Delete</button></div>
@@ -88,15 +88,51 @@
     </div>
     <div id="activeDevices" class="col-md-6 right-border black-border full-size" ng-controller="ActiveDevicesController as activeDevicesController">
       <h3 style="display: inline-block;">Your Devices</h3>
-      <button type="button" class="btn btn-success pull-right" style="margin-top:15px;" ng-click="createDevice()">+</button>
+      <button type="button" class="btn btn-success pull-right" style="margin-top:15px;" data-toggle="modal" data-target="#deviceModal">+</button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="deviceModal" tabindex="-1" role="dialog" aria-labelledby="deviceModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="deviceModalLabel">Add a Script</h4>
+            </div>
+            <form>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="name">Device Type</label>
+                  <select class="form-control">
+                    <option ng-repeat="(id, device) in storage.devices">{{id}}</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="name">Device Name</label>
+                  <input type="text" class="form-control" id="name" placeholder="Enter Script Name">
+                </div>
+                <div class="form-group">
+                  <label for="description">Description</label>
+                  <input type="text" class="form-control" id="description" placeholder="Enter Description">
+                </div>
+                Add fields for parameters based on the selection above (dynamically)
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="createDevice()">Add</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- End of Modal -->
       <hr/>
       <div id="devicesContent" class="row scrollable-y full-size">
         <!-- Repeat -->
-        <div class="row spaced-row" ng-repeat="device in activeDevicesController.activeDevices" ng-class-odd="'odd'" ng-class-even="'even'">
+        <div class="row spaced-row" ng-repeat="(id, device) in storage.activeDevices" ng-class-odd="'odd'" ng-class-even="'even'">
           <div class="col-md-8 center">
-            {{device.name}}
+            {{id}}
             <br/>
-            {{device.description}}
+            {{device.type}}
           </div>
           <div class="col-md-2 center"><button type="button" class="btn btn-primary">Edit</button></div>
           <div class="col-md-2 center"><button type="button" class="btn btn-danger" ng-click="deleteDevice(device)">Delete</button></div>
