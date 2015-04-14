@@ -9,6 +9,12 @@
       .controller('ActiveScriptContentController', ['$scope', 'MyJsonService', function($scope, MyJsonService) {
         $scope.storage = MyJsonService.get();
 
+        $scope.setScript = function(selectedScript){
+          console.log("SetScript Called");
+          console.log(selectedScript);
+          $scope.selectedScript = selectedScript;
+        };
+
         // saving a new script
         $scope.createScript = function () {
           // TODO
@@ -34,11 +40,33 @@
           console.log($scope.storage);
           $scope.storage.$save();
         };
+
+        $scope.findDevicesMatching = function (param) {
+          console.log("findDevicesMatching called");
+          var matchingDevices = [];
+          for (device in $scope.storage.activeDevices)
+          {
+            if ($scope.storage.activeDevices[device].type == param)
+            {
+              // console.log(device);
+              // console.log("deviceType matched param");
+              matchingDevices.push(device);
+            }
+          }
+          // console.log(matchingDevices.length);
+          return matchingDevices;
+        };
   }]);
   angular
     .module('ohh')
       .controller('ActiveDevicesController', ['$scope', 'MyJsonService', function($scope, MyJsonService) {
         $scope.storage = MyJsonService.get();
+
+        $scope.setDevice = function(selectedDevice){
+          console.log("SetDevice Called");
+          console.log(selectedDevice);
+          $scope.selectedDevice = selectedDevice;
+        };
 
         // saving a new devices
         $scope.createDevice = function () {
