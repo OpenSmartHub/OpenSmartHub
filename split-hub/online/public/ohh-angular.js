@@ -12,33 +12,8 @@
         $scope.setScript = function(selectedScript){
           console.log("SetScript Called");
           console.log(selectedScript);
-          $scope.selectedScript = selectedScript;
-        };
 
-        // saving a new script
-        $scope.createScript = function () {
-          // TODO
-          console.log($scope.storage);
-          console.log("createScript Called");
-        };
-
-        // removing a script
-        $scope.deleteScript = function (script) {
-          scriptData = angular.copy(script); // strips the $$hashkey included by ng-repeat
-          console.log("deleteScript called");
-          console.log(script);
-          console.log(scriptData);
-          console.log($scope.storage);
-          console.log($scope.storage.activeScripts);
-          
-          // Find and remove item from an array
-          console.log($scope.storage.activeScripts.indexOf(script));
-          var i = $scope.storage.activeScripts.indexOf(script);
-          if(i != -1) {
-            $scope.storage.activeScripts.splice(i, 1);
-          }
-          console.log($scope.storage);
-          $scope.storage.$save();
+          $scope.selectedScript = $scope.storage.scripts[selectedScript];
         };
 
         $scope.findDevicesMatching = function (param) {
@@ -56,28 +31,85 @@
           // console.log(matchingDevices.length);
           return matchingDevices;
         };
+
+        // saving a new script
+        $scope.createScript = function (newScriptName, newScript) {
+          console.log(newScriptName)
+          console.log(newScript);
+          console.log($scope.selectedScript);
+          $scope.storage.activeScripts[$scope.newScriptObjectName] = $scope.newScriptObject;
+          //$scope.storage.$save();
+        };
+
+        // removing a script
+        $scope.deleteScript = function (script) {
+          scriptData = angular.copy(script); // strips the $$hashkey included by ng-repeat
+          console.log("deleteScript called");
+          console.log(script);
+          console.log(scriptData);
+          console.log($scope.storage);
+          console.log($scope.storage.activeScripts);
+          
+          // Find and remove item from an array
+          delete $scope.storage.activeScripts[script];
+
+          //console.log($scope.storage.activeScripts.indexOf(script));
+          //var i = $scope.storage.activeScripts.indexOf(script);
+          // if(i != -1) {
+          //   $scope.storage.activeScripts.splice(i, 1);
+          // }
+
+          console.log($scope.storage);
+          $scope.storage.$save();
+        };
   }]);
   angular
     .module('ohh')
       .controller('ActiveDevicesController', ['$scope', 'MyJsonService', function($scope, MyJsonService) {
         $scope.storage = MyJsonService.get();
+        var newDevice = {};
+        var newDeviceName = "";
 
         $scope.setDevice = function(selectedDevice){
           console.log("SetDevice Called");
-          console.log(selectedDevice);
-          $scope.selectedDevice = selectedDevice;
+
+          $scope.selectedDevice = $scope.storage.devices[selectedDevice];
         };
 
         // saving a new devices
-        $scope.createDevice = function () {
-          // TODO
+        $scope.createDevice = function (newDeviceName, newDevice) {
+          console.log(newDeviceName)
+          console.log("newDevice");
+          console.log(newDevice);
+
+          // re-organize the params into an array instead of dictionary
+          var params = [];
+          for (var temp in newDevice.params)
+          {
+            params.push(newDevice.params[temp]);
+          }
+          newDevice.params = params;
+
           console.log("createDevice Called");
+          $scope.storage.activeDevices[newDeviceName] = newDevice;
+          $scope.storage.$save();
         };
 
         // removing a script
         $scope.deleteDevice = function (device) {
-          // TODO
           console.log("deleteDevice Called");
+          deviceData = angular.copy(device);
+
+          // Find and remove item from an array
+          delete $scope.storage.activeDevices[device];
+
+          // console.log($scope.storage.activeDevices.indexOf(device));
+          // var i = $scope.storage.activeDevices.indexOf(device);
+          // if(i != -1) {
+          //   $scope.storage.activeDevices.splice(i, 1);
+          // }
+          console.log($scope.storage);
+          $scope.storage.$save();
         };
   }]);
 })();

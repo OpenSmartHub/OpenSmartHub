@@ -21,10 +21,10 @@ body {
   border-right-width: 2px;
 }
 .full-size{
-  height:100%;
+  height:200px;
 }
-.scrollable-y{
-  overflow-y: scroll;
+.scrollable{
+  overflow: scroll;
 }
 .center{
   text-align: center;

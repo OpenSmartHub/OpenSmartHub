@@ -31,6 +31,7 @@ app.post('/storage', function(req, res) {
   var requestBody = "";
   req.on('data', function(data) {
     requestBody += data;
+    fileData = JSON.parse(data);
     console.log(requestBody);
     fs.writeFile('./public/storage.json', requestBody, function (err) {
       if (err) throw err;

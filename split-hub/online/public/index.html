@@ -43,35 +43,36 @@
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               <h4 class="modal-title" id="scriptModalLabel">Add a Script</h4>
             </div>
-            <form>
+            <form id="newScriptForm" ng-submit="createScript(newScriptName, newScript)">
               <div class="modal-body">
                 <div class="form-group">
                   <label for="name">Script Type</label>
-                  <select class="form-control" ng-model="selectedScript" ng-options="script as id for (id, script) in storage.scripts" ng-change="setScript(selectedScript)">
+                  <select class="form-control" ng-model="newScript.type" ng-options="id as id for (id, script) in storage.scripts" ng-change="setScript(newScript.type)">
                     <option>{{id}}</option>
                   </select>
                 </div>
                 <div class="form-group">
                   <label for="name">Script Name</label>
-                  <input type="text" class="form-control" id="name" placeholder="Enter Script Name">
+                  <input type="text" class="form-control" id="name" ng-model="newScriptName" placeholder="Enter Script Name">
+                  <span ng-bind="user.name()"></span>
                 </div>
                 <div class="form-group">
                   <label for="description">Description</label>
-                  <input type="text" class="form-control" id="description" placeholder="Enter Description">
+                  <input type="text" class="form-control" id="description" ng-model="newScript.description" placeholder="Enter Description">
                 </div>
                 <!--
                 Add fields for parameters based on the selection above (dynamically)
                 -->
                 <div class="form-group" ng-repeat="param in selectedScript.params track by $index">
                   <label for="description">{{param}}</label>
-                    <select ng-if="findDevicesMatching(param).length > 0" class="form-control" ng-model="selectedDevice" ng-options="deviceOption as device for (id, device) in findDevicesMatching(param)">
+                    <select ng-if="findDevicesMatching(param).length > 0" class="form-control" ng-model="newScript.params[$index]" ng-options="deviceOption as device for (id, device) in findDevicesMatching(param)">
                       <option>{{deviceOption}}</option>
-                    <input ng-if="findDevicesMatching(param).length == 0" type="text" class="form-control" id="description" placeholder="">
+                    <input ng-if="findDevicesMatching(param).length == 0" type="text" ng-model="newScript.params[$index]" class="form-control">
                 </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="createScript()">Add</button>
+                <button type="submit" class="btn btn-primary" data-dismiss="modal" ng-click="createScript(newScriptName, newScript)">Add</button>
               </div>
             </form>
           </div>
@@ -80,7 +81,7 @@
       <!-- End of Modal -->
 
       <hr/>
-      <div id="activeScriptsContent" class="row scrollable-y full-size">
+      <div id="activeScriptsContent" class="row scrollable full-size">
         <!-- Repeat -->
         <div class="row spaced-row" ng-repeat="(id, script) in storage.activeScripts" ng-class-odd="'odd'" ng-class-even="'even'">
           <div class="col-md-8 center">
@@ -88,8 +89,8 @@
             <br/>
             Type: {{script.type}}
           </div>
-          <div class="col-md-2 center"><button type="button" class="btn btn-primary">Edit</button></div>
-          <div class="col-md-2 center"><button type="button" class="btn btn-danger" ng-click="deleteScript(script)">Delete</button></div>
+          <!--<div class="col-md-2 center"><button type="button" class="btn btn-primary">Edit</button></div>-->
+          <div class="col-md-2 center"><button type="button" class="btn btn-danger" ng-click="deleteScript(id)">Delete</button></div>
         </div>
         <!-- End of Repeat -->
       </div>
@@ -106,33 +107,33 @@
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               <h4 class="modal-title" id="deviceModalLabel">Add a Device</h4>
             </div>
-            <form>
+            <form id="newDeviceForm" ng-submit="createDevice(newDeviceName, newDevice)">
               <div class="modal-body">
                 <div class="form-group">
                   <label for="name">Device Type</label>
-                  <select class="form-control" ng-model="selectedDevice" ng-options="device as id for (id, device) in storage.devices" ng-change="setDevice(selectedDevice)">
+                  <select class="form-control" ng-model="newDevice.type" ng-options="id as id for (id, device) in storage.devices" ng-change="setDevice(newDevice.type)" required>
                     <option>{{id}}</option>
                   </select>
                 </div>
                 <div class="form-group">
                   <label for="name">Device Name</label>
-                  <input type="text" class="form-control" id="name" placeholder="Enter Script Name">
+                  <input type="text" class="form-control" id="name" ng-model="newDeviceName" placeholder="Enter Device Name" required>
                 </div>
                 <div class="form-group">
                   <label for="description">Description</label>
-                  <input type="text" class="form-control" id="description" placeholder="Enter Description">
+                  <input type="text" class="form-control" id="description" ng-model="newDevice.description" placeholder="Enter Description">
                 </div>
                 <!--
                 Add fields for parameters based on the selection above (dynamically)
                 -->
                 <div class="form-group" ng-repeat="param in selectedDevice.params track by $index">
                   <label for="description">{{param}}</label>
-                    <input type="text" class="form-control" id="description" placeholder="">
+                    <input type="text" class="form-control" ng-model="newDevice.params[$index]" placeholder="" required>
                 </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="createDevice()">Add</button>
+                <button type="submit" class="btn btn-primary" data-dismiss="modal" ng-click="createDevice(newDeviceName, newDevice)">Add</button>
               </div>
             </form>
           </div>
@@ -140,7 +141,7 @@
       </div>
       <!-- End of Modal -->
       <hr/>
-      <div id="devicesContent" class="row scrollable-y full-size">
+      <div id="activeDevicesContent" class="row scrollable full-size">
         <!-- Repeat -->
         <div class="row spaced-row" ng-repeat="(id, device) in storage.activeDevices" ng-class-odd="'odd'" ng-class-even="'even'">
           <div class="col-md-8 center">
@@ -148,8 +149,8 @@
             <br/>
             Type: {{device.type}}
           </div>
-          <div class="col-md-2 center"><button type="button" class="btn btn-primary">Edit</button></div>
-          <div class="col-md-2 center"><button type="button" class="btn btn-danger" ng-click="deleteDevice(device)">Delete</button></div>
+          <!--<div class="col-md-2 center"><button type="button" class="btn btn-primary">Edit</button></div>-->
+          <div class="col-md-2 center"><button type="button" class="btn btn-danger" ng-click="deleteDevice(id)">Delete</button></div>
         </div>
         <!-- End of Repeat -->
       </div>
@@ -160,6 +161,8 @@
   <script>
     $('#activeScripts').css('height', $(window).height()-75);
     $('#activeDevices').css('height', $(window).height()-75);
+    $('#activeScriptsContent').css('height', $(window).height()-200);
+    $('#activeDevicesContent').css('height', $(window).height()-200);
   </script>
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
