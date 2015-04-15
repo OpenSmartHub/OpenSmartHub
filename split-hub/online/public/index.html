@@ -65,9 +65,13 @@
                 -->
                 <div class="form-group" ng-repeat="param in selectedScript.params track by $index">
                   <label for="description">{{param}}</label>
+                    <!--
                     <select ng-if="findDevicesMatching(param).length > 0" class="form-control" ng-model="newScript.params[$index]" ng-options="deviceOption as device for (id, device) in findDevicesMatching(param)">
                       <option>{{deviceOption}}</option>
-                    <input ng-if="findDevicesMatching(param).length == 0" type="text" ng-model="newScript.params[$index]" class="form-control">
+                    </select>
+                    ng-if="findDevicesMatching(param).length == 0"
+                    -->
+                    <input type="text" ng-model="newScript.params[$index]" class="form-control">
                 </div>
               </div>
               <div class="modal-footer">

@@ -34,11 +34,21 @@
 
         // saving a new script
         $scope.createScript = function (newScriptName, newScript) {
-          console.log(newScriptName)
+          console.log("createScript");
+          console.log(newScriptName);
           console.log(newScript);
-          console.log($scope.selectedScript);
-          $scope.storage.activeScripts[$scope.newScriptObjectName] = $scope.newScriptObject;
-          //$scope.storage.$save();
+
+          // re-organize the params into an array instead of dictionary
+          var params = [];
+          for (var temp in newScript.params)
+          {
+            params.push(newScript.params[temp]);
+          }
+          newScript.params = params;
+
+          $scope.storage.activeScripts[newScriptName] = newScript;
+          console.log($scope.storage.activeScripts);
+          $scope.storage.$save();
         };
 
         // removing a script
