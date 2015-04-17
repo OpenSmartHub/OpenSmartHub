@@ -41,6 +41,14 @@ socket.on('message',function(event){
   console.log('Received message from server!',event);
 });
 
+socket.on('data', function(data){
+  fs.writeFile('./storage.json', data, function (err) {
+    if (err) throw err;
+    console.log('It\'s saved!');
+    PopulateRunningDictionaries();
+  });
+});
+
 // Required for Scripts
 var config = require('./config.js');
 var sparkInit = require('./automation_modules/devices/spark/sparkInit.js');
@@ -57,7 +65,7 @@ var SparkMotionToWemoSwitch = require('./automation_modules/sparkMotionToWemoSwi
 var ParseParamForDevice = function(identifier, value){
   if(identifier.indexOf("config-") !=-1)
   {
-    return configDictionary[identifier.substring(7)]; // returns the string minus the config-
+    return config.configDictionary[identifier.substring(7)]; // returns the string minus the config-
   }else if(identifier.indexOf("int-") !=-1){
     return parseInt(value);
   }else if(identifier.indexOf("string-") !=-1){

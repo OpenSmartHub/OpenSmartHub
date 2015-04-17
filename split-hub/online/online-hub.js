@@ -5,6 +5,9 @@ var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 var fs = require('fs');
 
+var connectionEstablished = false;
+var connectedSocket;
+
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
 });
@@ -37,13 +40,27 @@ app.post('/storage', function(req, res) {
       if (err) throw err;
       console.log('It\'s saved!');
     });
+
+    if(connectionEstablished)
+    {
+      connectedSocket.emit('data', JSON.stringify(fileData));
+    }
   });
 });
 
 // Handles websocket connection to the local brain
 io.on('connection', function (socket) {
+  connectionEstablished = true;
+  connectedSocket = socket;
+
   console.log("connection established");
-  socket.emit('message', { user: 'online-hub', msg: 'you there?' });
+  //socket.emit('message', { user: 'online-hub', msg: 'you there?' });
+  
+  // emit the message containing the data
+  if (typeof fileData != 'undefined')
+  {
+    socket.emit('data', JSON.stringify(fileData));
+  }
 
   // Success!  Now listen to messages to be received
   socket.on('message',function(event){ 
@@ -53,5 +70,6 @@ io.on('connection', function (socket) {
 
   socket.on('disconnect',function(){
     console.log('client has disconnected');
+    connectionEstablished = false;
   });
 });
