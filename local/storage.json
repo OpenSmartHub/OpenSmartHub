@@ -1,6 +1,4 @@
 {
-  "config": {
-    },
   "devices": {
     "SparkInit" : {
       "init" : "Spark",

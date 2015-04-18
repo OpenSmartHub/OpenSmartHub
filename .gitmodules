@@ -1,6 +1,3 @@
-[submodule "combined-hub/automation/automation_modules/devices/wemo"]
-	path = combined-hub/automation/automation_modules/devices/wemo
-	url = https://github.com/anthony-ngu/node-upnp-controlpoint.git
-[submodule "split-hub/local/automation_modules/devices/wemo"]
-	path = split-hub/local/automation_modules/devices/wemo
+[submodule "local/automation_modules/devices/wemo"]
+	path = local/automation_modules/devices/wemo
 	url = https://github.com/anthony-ngu/node-upnp-controlpoint.git
