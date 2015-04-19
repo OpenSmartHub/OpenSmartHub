@@ -31,7 +31,7 @@ WeatherUnderground.prototype.getWeatherUndergroundData = function() {
     res.on('end', function(){
       var response = data; // This transfers data from the chunked version of Bytes to a JSON type
       var result = JSON.parse(response); // parses it into Object
-      //console.log(result);
+      // console.log(result);
 
       self.emit("result", result); // this gives an immediate result
 

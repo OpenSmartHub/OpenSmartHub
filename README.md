@@ -29,29 +29,18 @@ Awesome! Here are the steps to set up your own private server hosted in the clou
 ### Option 1: (Split Hub)
 Use Azure for a website and home hub that you can access from anywhere with a local component to communicate with locally connected devices.
 
-0. Open an Azure account and create a free website (this will be the host for your home hub)
-0. In the configure tab, turn on websockets (the two components communicate through this)
+0. Open an Azure account and create a free website (this will be the host for your online-hub)
+0. In the configure tab, turn on WebSockets (the two components communicate through this) and make sure it is set to `Always On`.
 0. Feel free to add Authentication to this site before you add any content to it (that way only you and a select few can access your data)
 0. Download this repo!
-0. Open and edit run.js under the automation folder and pick and choose the functionality you want. For more info on how this is set up, scroll down to the Smart Home Modules section. (Note: You need the spark module in your root node_module directory in order to run spark code on the server!)
 0. Rename public_config.js to config.js and replace it's contents with your configuration credentials.
-0. Zip the "automation_module" folder, config.js, and run.js into one zip file and add it to the WebJobs on your Azure Website. (If you want it to truly run continuously, you will need to upgrade your website from Shared or Free to Basic or Standard)
-
-### Option 2: (Combined Hub)
-Use any computer or micro-controller with node.js capabilities for a local network hub
-
-1. Install Node.js
-2. Download this repo!
-3. Open and edit run.js under the automation folder and pick and choose the functionality you want. For more info on how this is set up, scroll down to the Smart Home Modules section.
-4. Rename public_config.js to config.js and replace it's contents with your configuration credentials.
-5. Run the command "node run.js"
-6. To host the local network site run the command in another terminal "node server.js"
+0. npm install (in the `local` folder and in the `local/automation_modules/devices/wemo` folder)
 
 # Home Hub Modules
 How the directories are set up:
-* the "automation" folder is the root of all automation. (thus the name)
-* the "automation_modules" folder is the home for all scripts and devices
-* "scripts" are all the connection pieces between devices. They dictate an interaction.
+* the `automation` folder is the root of all automation. (thus the name)
+* the `automation_modules` folder is the home for all scripts and devices
+* `scripts` are all the connection pieces between devices. They dictate an interaction.
 * the "devices" folder is where all the folders for different devices are stored
 * each device folder is where the configurations for devices are set up (sometimes devices can have different programs running on them and this is how they are separated)
 Note: In the case of the buttonToLight script, Spark devices can publish events on the firmware side. These events can be subscribed to and used as triggers, so the sparkButton does not require a separate device js file.
@@ -68,21 +57,3 @@ There are other open source automation projects but can you easily use it, alter
 
 Note:
 The wemo devices folder is a submodule based off of [Stormboy's node-upnp-controlpoint](https://github.com/stormboy/node-upnp-controlpoint)
-
-// Active Script Interface
-// parameters are in order and must be placed in order
-// parameters are just keys to the vaue in a Dictionary
-{name, description, type, [parameters]}
-
-// Script Interface
-// parameters are in order and must be placed in order
-// parameters are types
-{name, description, [parameters]}
-
-// Active Device Interface
-// the parameters are strings
-// the key is linked in a Dictionary to a value
-{name, type, key, [parameters]}
-
-// Device Interface
-{name, [parameter]}

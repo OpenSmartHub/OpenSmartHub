@@ -13,13 +13,28 @@ var triggerWeMo = function(device, value)
   }
 }
 
-exports.SparkMotionToWemoSwitch = function(cp, spark, spark_motion_num, wemo_device_name)
+var SparkMotionToWemoSwitch = function(cp, spark, spark_motion_num, wemo_device_name)
 {
   var wemoResponseDevices = cp.devices; // the response from call to look up your network
   var wemoDevice; // handle to the wemo device you specified
   var wemoState = 0;
 
-  cp.on("device", function(device){
+  var sparkCallback = function() {
+    spark.listDevices().then(function(devices) {
+      devices[spark_motion_num].onEvent('motion', function(data) {
+        if(data != null)
+        {
+          if(data.data == "1" && wemoState == 0)
+          {
+            triggerWeMo(wemoDevice, true);
+          }else if(data.data == "0" && wemoState == 1){
+            triggerWeMo(wemoDevice, false);
+          }
+        }
+      });
+    });
+  };
+  var callback = function(device){
     if(!wemoDevice) // to prevent repetitive device registrations
     {
       for (var tempDevice in cp.devices) // finds all the devices on your network
@@ -47,21 +62,7 @@ exports.SparkMotionToWemoSwitch = function(cp, spark, spark_motion_num, wemo_dev
             });
           }
 
-          spark.on('login', function() {
-            spark.listDevices().then(function(devices) {
-              devices[spark_motion_num].onEvent('motion', function(data) {
-                if(data != null)
-                {
-                  if(data.data == "1" && wemoState == 0)
-                  {
-                    triggerWeMo(wemoDevice, true);
-                  }else if(data.data == "0" && wemoState == 1){
-                    triggerWeMo(wemoDevice, false);
-                  }
-                }
-              });
-            });
-          });
+          spark.on('login', sparkCallback);
         }
       }
       // check if wemoDevice was not found (if not, log it)
@@ -70,5 +71,17 @@ exports.SparkMotionToWemoSwitch = function(cp, spark, spark_motion_num, wemo_dev
         console.log("WeMo Device \"" + wemo_device_name + "\" not found.");        
       }
     }
-  });
+  }
+
+  SparkMotionToWemoSwitch.prototype.begin = function(){
+    // console.log("begin");
+    cp.on("device", callback);
+  };
+  SparkMotionToWemoSwitch.prototype.close = function(){
+    // console.log("close");
+    spark.removeListener('login', sparkCallback);
+    cp.removeListener('device', callback);
+  };
 }
+
+exports.SparkMotionToWemoSwitch = SparkMotionToWemoSwitch;

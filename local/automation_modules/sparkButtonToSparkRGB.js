@@ -6,17 +6,16 @@ var sparkRGB = require('./devices/spark/sparkRGB.js');
 var inputOn = '048,255,255,255,100,100,100,100,100';
 var inputOff = '048,000,000,000,100,100,100,100,100';
 
-exports.SparkButtonToSparkRGB = function(spark, spark_button_num, spark_rgb_num)
+var SparkButtonToSparkRGB = function(spark, spark_button_num, spark_rgb_num)
 {
-  spark.on('login', function() {
-    //Your code here
+  var callback = function() {
     spark.listDevices().then(function(devices) {
       devices[spark_button_num].onEvent('button', function(data) {
-        console.log("Event: ");
-        console.log(devices[spark_button_num]);
+        // console.log("Event: ");
+        // console.log(devices[spark_button_num]);
         if(data != null)
         {
-          console.log(data.data); // this is the same data that you outputted from the sparkButton
+          // console.log(data.data); // this is the same data that you outputted from the sparkButton
           if(data.data == "triggeredOn")
           {
             sparkRGB.toggleLight(devices[spark_rgb_num], inputOn);
@@ -26,5 +25,16 @@ exports.SparkButtonToSparkRGB = function(spark, spark_button_num, spark_rgb_num)
         }
       });
     });
-  });
+  };
+
+  SparkButtonToSparkRGB.prototype.begin = function(){
+    // console.log("begin");
+    spark.on('login', callback);
+  };
+  SparkButtonToSparkRGB.prototype.close = function(){
+    // console.log("close");
+    spark.removeListener('login', callback);
+  };
 }
+
+exports.SparkButtonToSparkRGB = SparkButtonToSparkRGB;

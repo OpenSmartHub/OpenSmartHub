@@ -92,6 +92,10 @@
             Name: {{id}}
             <br/>
             Type: {{script.type}}
+            <br/>
+            <div ng-if='script.description != null'>
+              Description: {{script.description}}
+            </div>
           </div>
           <!--<div class="col-md-2 center"><button type="button" class="btn btn-primary">Edit</button></div>-->
           <div class="col-md-2 center"><button type="button" class="btn btn-danger" ng-click="deleteScript(id)">Delete</button></div>
@@ -152,6 +156,10 @@
             Name: {{id}}
             <br/>
             Type: {{device.type}}
+            <br/>
+            <div ng-if='device.description != null'>
+              Description: {{device.description}}
+            </div>
           </div>
           <!--<div class="col-md-2 center"><button type="button" class="btn btn-primary">Edit</button></div>-->
           <div class="col-md-2 center"><button type="button" class="btn btn-danger" ng-click="deleteDevice(id)">Delete</button></div>

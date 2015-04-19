@@ -1,5 +1,6 @@
 var io = require('socket.io-client');
 var fs = require ('fs');
+
 var deviceDictionary = {};
 var scriptDictionary = {};
 var activeDeviceDictionary = {};
@@ -7,26 +8,40 @@ var activeScriptDictionary = {};
 var runningDeviceDictionary = {};
 var runningScriptDictionary = {};
 
+// Global Hub Variables
+var storedWeatherData = {
+  data: '',
+  currentOutsideTemp: '',
+  sunriseHour: '',
+  sunriseMinute: '',
+  sunsetHour: '',
+  sunsetMinute: ''
+};
+
 // Loads the scripts/devices from the json file
-var fileData;
-fs.readFile('./storage.json', 'utf8', function (err, data) {
-  if (err) throw err;
-  fileData = JSON.parse(data);
-  // console.log(fileData);
-  deviceDictionary = fileData.devices;
-  // console.log("deviceDictionary-----------------");
-  // console.log(deviceDictionary);
-  scriptDictionary = fileData.scripts;
-  // console.log("scriptDictionary-----------------");
-  // console.log(scriptDictionary);
-  activeDeviceDictionary = fileData.activeDevices;
-  // console.log("activeDeviceDictionary-----------------");
-  // console.log(activeDeviceDictionary);
-  activeScriptDictionary = fileData.activeScripts;
-  // console.log("activeScriptDictionary-----------------");
-  // console.log(activeScriptDictionary);
-  PopulateRunningDictionaries();
-});
+var ReadData = function(){
+  var fileData;
+  fs.readFile('./storage.json', 'utf8', function (err, data) {
+    if (err) throw err;
+    fileData = JSON.parse(data);
+    // console.log(fileData);
+    deviceDictionary = fileData.devices;
+    // console.log("deviceDictionary-----------------");
+    // console.log(deviceDictionary);
+    scriptDictionary = fileData.scripts;
+    // console.log("scriptDictionary-----------------");
+    // console.log(scriptDictionary);
+    activeDeviceDictionary = fileData.activeDevices;
+    // console.log("activeDeviceDictionary-----------------");
+    // console.log(activeDeviceDictionary);
+    activeScriptDictionary = fileData.activeScripts;
+    // console.log("activeScriptDictionary-----------------");
+    // console.log(activeScriptDictionary);
+    PopulateRunningDictionaries();
+    RunRunningDictionaries();
+  });
+};
+ReadData();
 
 socket = io.connect('http://localhost:3000'); // For local debug
 //socket = io.connect('http://ohh.azurewebsites.net');
@@ -45,7 +60,8 @@ socket.on('data', function(data){
   fs.writeFile('./storage.json', data, function (err) {
     if (err) throw err;
     console.log('It\'s saved!');
-    PopulateRunningDictionaries();
+    ClearRunningDictionaries();
+    ReadData();
   });
 });
 
@@ -60,6 +76,7 @@ var SparkButtonToSparkRGB = require('./automation_modules/sparkButtonToSparkRGB.
 var SparkButtonToWemoSwitch = require('./automation_modules/sparkButtonToWemoSwitch.js').SparkButtonToWemoSwitch;
 var TimedWemoSwitch = require('./automation_modules/timedWemoSwitch.js').TimedWemoSwitch;
 var SparkMotionToWemoSwitch = require('./automation_modules/sparkMotionToWemoSwitch.js').SparkMotionToWemoSwitch;
+var GetWeatherUndergroundDataOnInterval = require('./automation_modules/getWeatherUndergroundDataOnInterval.js').GetWeatherUndergroundDataOnInterval;
 
 // Helper Functions for parsing the Params
 var ParseParamForDevice = function(identifier, value){
@@ -93,6 +110,27 @@ var ParseParamForScript = function(identifier, value){
   }
 }
 
+var RunRunningDictionaries = function(){
+  for(kvp in runningScriptDictionary)
+  {
+    runningScriptDictionary[kvp].begin();
+  }
+}
+
+var ClearRunningDictionaries = function(){
+  for(kvp in runningScriptDictionary)
+  {
+    runningScriptDictionary[kvp].close();
+  }
+
+  deviceDictionary = {};
+  scriptDictionary = {};
+  activeDeviceDictionary = {};
+  activeScriptDictionary = {};
+  runningDeviceDictionary = {};
+  runningScriptDictionary = {};
+};
+
 // Populate the Running Dictionaries and make sure it works
 // Populate the Running Device Dictionary
 var PopulateRunningDictionaries = function()
@@ -103,9 +141,10 @@ var PopulateRunningDictionaries = function()
     // console.log("--------------------------------")
     // console.log("kvp");
     // console.log(kvp);
-    var defaultDevice = deviceDictionary[activeDeviceDictionary[kvp]["type"]];
-    // console.log("Default Device");
-    // console.log(defaultDevice);
+    var type = activeDeviceDictionary[kvp]["type"]
+    var defaultDevice = deviceDictionary[type];
+    console.log("Default Device");
+    console.log(defaultDevice);
     if(defaultDevice)
     {
       // If init is null
@@ -126,13 +165,30 @@ var PopulateRunningDictionaries = function()
           // Specialized for WemoControlPoint
           runningDeviceDictionary[kvp] = WemoControlPoint;
         }else{
-          // if params are not null, then parse them and place them in the right order in the creation function
-          // Specialized for Spark Init
-          // console.log("not null params " + kvp);
-          // these actually don't use the activeDevice params since there are none and the choice to put them in the configDictionary locally
-          runningDeviceDictionary[kvp] = sparkInit.init(
-            ParseParamForDevice(defaultDevice.params[0], activeDeviceDictionary[kvp]["params"][0]),
-            ParseParamForDevice(defaultDevice.params[1], activeDeviceDictionary[kvp]["params"][1]));
+          switch(type) {
+            case "SparkInit":
+            // if params are not null, then parse them and place them in the right order in the creation function
+            // Specialized for Spark Init
+            // console.log("not null params " + kvp);
+            // these actually don't use the activeDevice params since there are none and the choice to put them in the configDictionary locally
+            runningDeviceDictionary[kvp] = sparkInit.init(
+              ParseParamForDevice(defaultDevice.params[0], activeDeviceDictionary[kvp]["params"][0]),
+              ParseParamForDevice(defaultDevice.params[1], activeDeviceDictionary[kvp]["params"][1]));
+              break;
+            case "WeatherUnderground":
+              runningDeviceDictionary[kvp] = new WeatherUnderground(ParseParamForDevice(defaultDevice.params[0], activeDeviceDictionary[kvp]["params"][0]));
+              runningDeviceDictionary[kvp].on("result", function(result){ // on the 'result' event, it will store the result
+                storedWeatherData.data = result;
+                storedWeatherData.currentOutsideTemp = result.current_observation.temp_f;
+                storedWeatherData.sunriseHour = result.moon_phase.sunrise.hour;
+                storedWeatherData.sunriseMinute = result.moon_phase.sunrise.minute;
+                storedWeatherData.sunsetHour = result.moon_phase.sunset.hour;
+                storedWeatherData.sunsetMinute = result.moon_phase.sunset.minute;
+              });
+              break;
+            default:
+              break;
+          }
         }
       }
     }
@@ -182,6 +238,12 @@ var PopulateRunningDictionaries = function()
             ParseParamForScript(scriptParams[1], activeScriptParams[1]),
             ParseParamForScript(scriptParams[2], activeScriptParams[2]));
           break;
+        case "GetWeatherUndergroundDataOnInterval":
+          // 3 params
+          runningScriptDictionary[kvp] = new GetWeatherUndergroundDataOnInterval(
+            ParseParamForScript(scriptParams[0], activeScriptParams[0]),
+            ParseParamForScript(scriptParams[1], activeScriptParams[1]));
+          break;
         default:
           break;
       }
@@ -195,18 +257,9 @@ var PopulateRunningDictionaries = function()
   // console.log(runningScriptDictionary);
 }
 
-// // Global Hub Variables
-// var storedWeatherData = {
-//   data: '',
-//   currentOutsideTemp: '',
-//   sunriseHour: '',
-//   sunriseMinute: '',
-//   sunsetHour: '',
-//   sunsetMinute: ''
-// };
-
 // // Initializations
 // var spark = sparkInit.init(config.SPARK_USERNAME, config.SPARK_PASSWORD);
+
 
 // var weatherUnderground = new WeatherUnderground(config.WEATHER_UNDERGROUND_KEY);
 // weatherUnderground.on("result", function(result){ // on the 'result' event, it will store the result
@@ -224,7 +277,7 @@ var PopulateRunningDictionaries = function()
 // setInterval(function() { // Polls for the Weather from WeatherUnderground every 15 minutes
 //   weatherUnderground.getWeatherUndergroundData();
 // }, 900000);
-
+// var getWeatherUndergroundDataOnInterval1 = new GetWeatherUndergroundDataOnInterval(weatherUnderground, 900000);
 // var sparkMotionToWemoSwitch1 = new SparkMotionToWemoSwitch(WemoControlPoint, spark, 1, config.WEMO_SWITCH_NAME1);
 // var sparkButtonToSparkRGB1 = new SparkButtonToSparkRGB(spark, 1, 0);
 // var sparkButtonToWemoSwitch1 = new SparkButtonToWemoSwitch(WemoControlPoint, spark, 1, config.WEMO_SWITCH_NAME1);
