@@ -1,9 +1,7 @@
 {
-  "name": "online-hub",
+  "name": "ohh",
   "version": "0.0.1",
-  "description": "the online hub in a split-hub architecture for the open source home hub",
+  "description": "the local hub in a split-hub architecture for the open source home hub",
   "dependencies": {
-    "socket.io": "*",
-    "express": "*"
   }
 }

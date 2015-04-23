@@ -37,13 +37,54 @@ Use Azure for a website and home hub that you can access from anywhere with a lo
 0. npm install (in the `local` folder and in the `local/automation_modules/devices/wemo` folder)
 
 # Home Hub Modules
-How the directories are set up:
-* the `automation` folder is the root of all automation. (thus the name)
-* the `automation_modules` folder is the home for all scripts and devices
-* `scripts` are all the connection pieces between devices. They dictate an interaction.
-* the "devices" folder is where all the folders for different devices are stored
-* each device folder is where the configurations for devices are set up (sometimes devices can have different programs running on them and this is how they are separated)
-Note: In the case of the buttonToLight script, Spark devices can publish events on the firmware side. These events can be subscribed to and used as triggers, so the sparkButton does not require a separate device js file.
+
+### Config File contains:
+
+  **Device Type Library** - [Dictionary]
+
+    Device Type - [Object]
+      * Name of type - [String]
+      * Array of Parameter Types for creation - (Array of strings in order with int-, double-, bool-, etc. prefixed)
+      * Triggers - [Dictionary]
+        * Trigger -> {name:"",params:[]}
+      * Actions - [Dictionary]
+        * Action -> {name:"",params:[]}
+
+  **Your Devices** - [Dictionary]
+
+    Device - [Object]
+      * Name your device - [String]
+      * Device Type - [String] -> Links to an entry in the Device Type Library
+      * Array of parameters for creation of device (in order) - [Array of strings of values]
+
+  **Your Scenarios** - [Dictionary]
+
+    Scenario - [Object]
+      * Name of scenario - [String]
+      * Trigger - [A single Trigger structure](Future: multiple triggers together)
+        * Trigger: {description: "ScenarioTriggerDescription", device: "deviceName", trigger:"triggerName", customTrigger:"customTriggerName" params:[]}
+      * List of Actions to perform - [Array of Action structures]
+        * Action: {description:"ScenarioActionDescription", device: "deviceName", action: "actionName", params:[]}
+
+### The result of the creation process using the config file above:
+  **Running Devices:** Dictionary of your devices
+
+    * Custom name for device - [String]
+    * Device - [Object] created using the details from the config file
+      * Dictionary of actions
+        * name: "actionName", action: var representation of action
+      * Dictionary of triggers
+        * name: "triggerName"
+
+  **Running Scenarios:** Dictionary of your scenarios
+
+    * Custom name for scenario - [String]
+    * ID -> created from device.on("event") trigger function {
+            builds the actions at runtime by looking at the config for the list of actions, the device and function (maps the device function), and the parameters
+        }
+
+Triggers can be made using a on("event") with a check inside (if statement that emits an event of special-naming when it is valid)
+    
 
 # The Future
 * **Community Growth! The more people that automate devices based on the hub and come up with recipes, the more robust the functionality will be!**
