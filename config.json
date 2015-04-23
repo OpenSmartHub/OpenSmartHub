@@ -1,0 +1,83 @@
+{
+  "deviceTypes":{
+    "SparkButton":{
+      "params":["int-id"],
+      "triggers":{
+        "on":"null",
+        "off":"null"
+        },
+      "actions":{
+      }
+    },
+    "SparkLight":{
+      "params":["int-id"],
+      "triggers":{
+        "on":["null"],
+        "off":["null"]
+        },
+      "actions":{
+        "toggle":["bool"]
+      }
+    },
+    "Clock":{ // Look into making this have a param of Timezone
+      "params":["null"],
+      "triggers":{
+        "timeTrigger":["datetime"],
+        },
+      "actions":{
+      }
+    }
+  },
+  "yourDevices":{
+    "PST Clock":{
+      "type":"Clock",
+      "params":["null"]
+    },
+    "ButtonOnTable":{
+      "type":"SparkButton",
+      "params":["1"]
+    },
+    "LightInLivingRoom":{
+      "type":"SparkLight",
+      "params":["0"]
+    }
+  },
+  "yourScenarios":[
+    {
+      "description":"When I press the button turn on the light",
+      "trigger":{
+          "description":"press the table button",
+          "device":"ButtonOnTable",
+          "trigger":"on",
+          "customTrigger":"null",
+          "params":["null"]
+      },
+      "actions":[
+        {
+          "description":"turn on the light",
+          "device":"LightInLivingRoom",
+          "action":"toggle",
+          "params":["true"]
+        }
+      ]
+    },
+    {
+      "description":"When it's midnight turn off the light",
+      "trigger":{
+          "description":"At midnight",
+          "device":"PST Clock",
+          "trigger":"timeTrigger",
+          "customTrigger":"atMidnight",
+          "params":["12:00am"]
+      },
+      "actions":[
+        {
+          "description":"turn off light in living room",
+          "device":"LightInLivingRoom",
+          "action":"off",
+          "params":["null"]
+        }
+      ]
+    }
+  ]
+}
