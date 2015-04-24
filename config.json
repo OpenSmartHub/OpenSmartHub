@@ -19,12 +19,20 @@
         "toggle":["bool"]
       }
     },
-    "Clock":{ // Look into making this have a param of Timezone
+    "Clock":{ 
       "params":["null"],
       "triggers":{
-        "timeTrigger":["datetime"],
+        "timeTrigger":["datetime"]
         },
       "actions":{
+      }
+    },
+    "Test":{ 
+      "params":["null"],
+      "triggers":{
+      },
+      "actions":{
+        "hello":["ArrayOfStrings"]
       }
     }
   },
@@ -40,6 +48,10 @@
     "LightInLivingRoom":{
       "type":"SparkLight",
       "params":["0"]
+    },
+    "TestPrinter":{
+      "type":"Test",
+      "params":["null"]
     }
   },
   "yourScenarios":[
@@ -76,6 +88,24 @@
           "device":"LightInLivingRoom",
           "action":"off",
           "params":["null"]
+        }
+      ]
+    },
+    {
+      "description":"Every 5 seconds say hello",
+      "trigger":{
+          "description":"Every 5 seconds",
+          "device":"PST Clock",
+          "trigger":"intervalTrigger",
+          "customTrigger":"every5seconds",
+          "params":["5"]
+      },
+      "actions":[
+        {
+          "description":"print hello",
+          "device":"TestPrinter",
+          "action":"hello",
+          "params":["hi","peace"]
         }
       ]
     }
