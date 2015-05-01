@@ -22,8 +22,12 @@
     "Clock":{ 
       "params":["null"],
       "triggers":{
-        "timeTrigger":["datetime"]
-        },
+        "specificDateTrigger":["year","month","day","hour","minutes","seconds","milliseconds"],
+        "yearlyTrigger":["month","day","hour","minutes","seconds","milliseconds"],
+        "monthlyTrigger":["day","hour","minutes","seconds","milliseconds"],
+        "dailyTrigger":["hour","minutes","seconds","milliseconds"],
+        "intervalTrigger":["hour","minutes","seconds","milliseconds"]
+      },
       "actions":{
       }
     },

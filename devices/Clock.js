@@ -3,11 +3,17 @@
   "Clock":{ 
       "params":["null"],
       "triggers":{
-        "timeTrigger":["datetime"],
+        "specificDateTrigger":["year","month","day","hour","minutes","seconds","milliseconds"],
+        "yearlyTrigger":["month","day","hour","minutes","seconds"],
+        "monthlyTrigger":["day","hour","minutes","seconds"],
+        "dailyTrigger":["hour","minutes","seconds"],
+        "intervalTrigger":["hour","minutes","seconds","milliseconds"],
         },
       "actions":{
       }
     }
+
+  // "daysOfTheWeekTrigger":["dates","hour","minutes","seconds","milliseconds"],
 */
 
 var util = require('util');
@@ -38,13 +44,13 @@ Clock.prototype.specificDateTrigger = function(customName, params){
   var milliseconds = params["milliseconds"];
 
   if(
-    (typeof year != undefined) &&
-    (typeof month != undefined) &&
-    (typeof day != undefined) &&
-    (typeof hour != undefined) &&
-    (typeof minutes != undefined) &&
-    (typeof seconds != undefined) &&
-    (typeof milliseconds != undefined)
+    (year) &&
+    (month) &&
+    (day) &&
+    (hour) &&
+    (minutes) &&
+    (seconds) &&
+    (milliseconds)
   ){ 
     // gets the four digit year (yyyy)
     // Specific date was given to trigger on
@@ -73,14 +79,13 @@ Clock.prototype.yearlyTrigger = function(customName, params){
   var hour = params["hour"];
   var minutes = params["minutes"];
   var seconds = params["seconds"];
-  var milliseconds = params["milliseconds"];
 
   if(
-    (typeof month != undefined) &&
-    (typeof day != undefined) &&
-    (typeof hour != undefined) &&
-    (typeof minutes != undefined) &&
-    (typeof seconds != undefined)
+    (month) &&
+    (day) &&
+    (hour) &&
+    (minutes) &&
+    (seconds)
     ){
     // Find the ms till the month
     // Continual interval trigger every year at this month and day
@@ -125,13 +130,12 @@ Clock.prototype.monthlyTrigger = function(customName, params){
   var hour = params["hour"];
   var minutes = params["minutes"];
   var seconds = params["seconds"];
-  var milliseconds = params["milliseconds"];
 
   if(
-    (typeof day != undefined) &&
-    (typeof hour != undefined) &&
-    (typeof minutes != undefined) &&
-    (typeof seconds != undefined) &&
+    (day) &&
+    (hour) &&
+    (minutes) &&
+    (seconds)
     ){
     var monthlyInterval = function(customName, params){
       var currentDateObject = new Date();
@@ -166,12 +170,11 @@ Clock.prototype.dailyTrigger = function(customName, params){
   var hour = params["hour"];
   var minutes = params["minutes"];
   var seconds = params["seconds"];
-  var milliseconds = params["milliseconds"];
 
   if(
-    (typeof hour != undefined) &&
-    (typeof minutes != undefined) &&
-    (typeof seconds != undefined) &&
+    (hour) &&
+    (minutes) &&
+    (seconds)
     ){
 
     // Find the ms till the day
@@ -209,6 +212,7 @@ Clock.prototype.dailyTrigger = function(customName, params){
   }
 }
 
+/*
 Clock.prototype.daysOfTheWeekTrigger = function(customName, params){
   var dates = params["dates"]; // this should be an array of the days of the week to repeat [0,1,2,3,4,5,6] 6 being Sunday and 0 being Monday
   var hour = params["hour"];
@@ -217,10 +221,10 @@ Clock.prototype.daysOfTheWeekTrigger = function(customName, params){
   var milliseconds = params["milliseconds"];
 
   if(
-    (typeof dates != undefined) &&
-    (typeof hour != undefined) &&
-    (typeof minutes != undefined) &&
-    (typeof seconds != undefined) &&
+    (dates) &&
+    (hour) &&
+    (minutes) &&
+    (seconds) &&
     ){
     var dayOfTheWeekInterval = function(customName, params){
       var currentDateObject = new Date();
@@ -246,6 +250,7 @@ Clock.prototype.daysOfTheWeekTrigger = function(customName, params){
     }
   }
 }
+*/
 
 Clock.prototype.intervalTrigger = function(customName, params){
   var self = this;
@@ -257,15 +262,15 @@ Clock.prototype.intervalTrigger = function(customName, params){
   var minutes = params["minutes"];
   var seconds = params["seconds"];
   var milliseconds = params["milliseconds"];
-  
+
   // any smaller than a day means that it i
-  if(typeof hour != undefined){
+  if(hours){
     intervalMs += 60*60*1000*hours;
   }
-  if(typeof minutes != undefined){
+  if(minutes){
     intervalMs += 60*1000*minutes;
   }
-  if(typeof seconds != undefined){
+  if(seconds){
     intervalMs += 1000*seconds;
   }
 
@@ -273,7 +278,7 @@ Clock.prototype.intervalTrigger = function(customName, params){
   {
     setInterval(function(){
       self.emit(customName);
-    }, msToInterval);
+    }, intervalMs);
   }
 };
 
