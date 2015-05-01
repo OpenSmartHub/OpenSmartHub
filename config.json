@@ -1,22 +1,12 @@
 {
   "deviceTypes":{
-    "SparkButton":{
-      "params":["int-id"],
+    "Wemo":{ 
+      "params":["name"],
       "triggers":{
-        "on":"null",
-        "off":"null"
-        },
+        "toggledTrigger":["on/off/both"]
+      },
       "actions":{
-      }
-    },
-    "SparkLight":{
-      "params":["int-id"],
-      "triggers":{
-        "on":["null"],
-        "off":["null"]
-        },
-      "actions":{
-        "toggle":["bool"]
+        "timedTurnOff":["milliseconds"]
       }
     },
     "Clock":{ 
@@ -45,16 +35,10 @@
       "type":"Clock",
       "params":{}
     },
-    "ButtonOnTable":{
-      "type":"SparkButton",
+    "WemoSwitch1":{
+      "type":"Wemo",
       "params":{
-        "int-id" : "1"
-      }
-    },
-    "LightInLivingRoom":{
-      "type":"SparkLight",
-      "params":{
-        "int-id" : "0"
+        "name" : "LED Strip"
       }
     },
     "TestPrinter":{
@@ -88,16 +72,54 @@
       "trigger":{
           "description":"At midnight",
           "device":"PST Clock",
-          "trigger":"timeTrigger",
+          "trigger":"dailyTrigger",
           "customTrigger":"atMidnight",
-          "params":{}
+          "params":{
+            "hour":"21",
+            "minutes":"42",
+            "seconds":"0"
+          }
       },
       "actions":[
         {
           "description":"turn off light in living room",
-          "device":"LightInLivingRoom",
-          "action":"off",
-          "params":{}
+          "device":"WemoSwitch1",
+          "action":"timedToggle",
+          "params":{
+            "on/off/both":"both",
+            "milliseconds":"0"
+          }
+        }
+      ]
+    },
+    {
+      "description":"Whenever Wemo is turned on, turn it off in 2 seconds",
+      "trigger":{
+          "description":"when wemo is turned on",
+          "device":"WemoSwitch1",
+          "trigger":"toggledTrigger",
+          "customTrigger":"wemo1Toggled",
+          "params":{
+            "on/off/both":"on"
+          }
+      },
+      "actions":[
+        {
+          "description":"timed turn off in two seconds",
+          "device":"WemoSwitch1",
+          "action":"timedToggle",
+          "params":{
+            "on/off/both":"off",
+            "milliseconds":"2000"
+          }
+        },
+        {
+          "description":"print hello",
+          "device":"TestPrinter",
+          "action":"hello",
+          "params":{
+            "ArrayOfStrings":["hi","peace"]
+          }
         }
       ]
     },

@@ -104,8 +104,7 @@ Clock.prototype.yearlyTrigger = function(customName, params){
         day,
         hour,
         minutes,
-        seconds,
-        milliseconds
+        seconds
       );
 
       dateObject.setFullYear(dateObject.getFullYear()+1);
@@ -146,8 +145,7 @@ Clock.prototype.monthlyTrigger = function(customName, params){
         day,
         hour,
         minutes,
-        seconds,
-        milliseconds
+        seconds
       );
 
       dateObject.setMonth(dateObject.getMonth()+1);
@@ -163,14 +161,18 @@ Clock.prototype.monthlyTrigger = function(customName, params){
         }, timeoutMs);
       }
     }
+    monthlyInterval(customName, params);
   }
 }
 
 Clock.prototype.dailyTrigger = function(customName, params){
+  var self = this;
   var hour = params["hour"];
   var minutes = params["minutes"];
   var seconds = params["seconds"];
-
+  console.log(hour);
+  console.log(minutes);
+  console.log(seconds);
   if(
     (hour) &&
     (minutes) &&
@@ -192,15 +194,14 @@ Clock.prototype.dailyTrigger = function(customName, params){
         currentDateObject.getDate(),
         hour,
         minutes,
-        seconds,
-        milliseconds
+        seconds
       );
 
-      dateObject.setDate(dateObject.getDate()+1);
+      //dateObject.setDate(dateObject.getDate()+1);
 
       var msConversionOfTriggerDate = dateObject.getTime();
       var timeoutMs = msConversionOfTriggerDate - msConversionOfCurrent;
-
+      console.log(timeoutMs);
       if(timeoutMs > 0)
       {
         setTimeout(function(){
@@ -208,7 +209,8 @@ Clock.prototype.dailyTrigger = function(customName, params){
           dailyInterval(customName, params); // calls it again the next month
         }, timeoutMs);
       }
-    }
+    };
+    dailyInterval(customName, params);
   }
 }
 
@@ -273,6 +275,8 @@ Clock.prototype.intervalTrigger = function(customName, params){
   if(seconds){
     intervalMs += 1000*seconds;
   }
+
+  console.log(intervalMs);
 
   if(intervalMs > 0)
   {
