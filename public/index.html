@@ -28,7 +28,7 @@
   </nav>
 
   <div class="container">
-    <div id="activeScripts" class="col-md-6 left-border black-border full-size" ng-controller="ActiveScriptContentController as activeScriptContentController">
+    <div id="yourScenarios" class="col-md-6 left-border black-border full-size" ng-controller="ActiveScriptContentController as activeScriptContentController">
       <h3 style="display: inline-block;">Your Scenarios</h3>
       <button type="button" class="btn btn-success pull-right" style="margin-top:15px;" data-toggle="modal" data-target="#scriptModal">+</button>
 
@@ -82,33 +82,46 @@
       <!-- End of Modal -->
 
       <hr/>
-      <div id="activeScriptsContent" class="row scrollable full-size">
-        <!-- Repeat -->
-        <div class="row spaced-row" ng-repeat="(id, scenario) in storage.yourScenarios" ng-class-odd="'odd'" ng-class-even="'even'">
-          <div class="col-md-8">
-            <h5>{{scenario.description}}</h5>
-            <br/>
-            Trigger: {{scenario.trigger.description}} : 
-              <div ng-repeat="(id, param) in scenario.trigger.params">
-                ({{id}} : {{param}})
+      <div id="yourScenariosContent" class="row scrollable full-size">
+        <div class="panel-group" id="accordionScenarios" role="tablist" aria-multiselectable="true">
+          <!-- Repeat -->
+          <div class="panel panel-default" ng-repeat="(id, scenario) in storage.yourScenarios">
+            <div class="panel-heading entry-bar" role="tab" id="headingScenario{{id}}">
+              <div class="col-md-8">
+                <h6 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordionScenarios" href="#scenario{{id}}" aria-expanded="true" aria-controls="collapseOne">
+                    {{scenario.description}}
+                  </a>
+                </h6>
               </div>
-            <br/>
-            <ul>
-              <li ng-repeat="(id, action) in scenario.actions">{{action.description}}
+              <div class="col-md-2 center"><button type="button" class="btn btn-primary">Edit</button></div>
+              <div class="col-md-2 center"><button type="button" class="btn btn-default" ng-click="deleteScript(id)"><img class="small-square" src="flat-color-icons/cancel.svg"></button></div>
+            </div>
+            <div id="scenario{{id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+              <div class="panel-body">
+                Trigger: {{scenario.trigger.description}} : 
                 <ul>
-                  <li ng-repeat="(id, param) in action.params">{{id}} : {{param}}</li>
+                  <li>{{scenario.trigger.device}} : {{scenario.trigger.trigger}}</li>
+                  <ul>
+                    <li ng-repeat="(id, param) in scenario.trigger.params">
+                      ({{id}} : {{param}})
+                    </li>
+                  </ul>
+                <ul>
+                  <li ng-repeat="(id, action) in scenario.actions">{{action.description}}
+                    <ul>
+                      <li>{{action.device}} : {{action.action}}</li>
+                      <ul>
+                        <li ng-repeat="(id, param) in action.params">{{id}} : {{param}}</li>
+                      </ul>
+                    </ul>
+                  </li>
                 </ul>
-              </li>
-            </ul>
+              </div>
+            </div>
           </div>
-          <!--
-          <div class="col-md-1 center"><button type="button" class="btn btn-primary"><img class="small-square" src="flat-color-icons/collapse.svg"></button></div>
-          -->
-          <div class="col-md-1 center"><button type="button" class="btn btn-default"><img class="small-square" src="flat-color-icons/expand.svg"></button></div>
-          <div class="col-md-1 center"><button type="button" class="btn btn-primary">Edit</button></div>
-          <div class="col-md-1 center"><button type="button" class="btn btn-default" ng-click="deleteScript(id)"><img class="small-square" src="flat-color-icons/cancel.svg"></button></div>
+          <!-- End of Repeat -->
         </div>
-        <!-- End of Repeat -->
       </div>
     </div>
     <div id="yourDevices" class="col-md-6 right-border black-border full-size" ng-controller="YourDevicesController as yourDevicesController">
@@ -153,34 +166,41 @@
       </div>
       <!-- End of Modal -->
       <hr/>
-      <div id="activeDevicesContent" class="row scrollable full-size">
-        <!-- Repeat -->
-        <div class="row spaced-row" ng-repeat="(id, device) in storage.yourDevices" ng-class-odd="'odd'" ng-class-even="'even'">
-          <div class="col-md-8">
-            {{id}} : {{device.type}}
-            <br/>
-            <ul>
-              <li ng-repeat="(paramName, param) in device.params">{{paramName}} : {{param}}</li>
-            </ul>
+      <div id="yourDevicesContent" class="row scrollable full-size">
+        <div class="panel-group" id="accordionDevices" role="tablist" aria-multiselectable="true">
+          <!-- Repeat -->
+          <div class="panel panel-default" ng-repeat="(id, device) in storage.yourDevices" >
+            <div class="panel-heading entry-bar" role="tab" id="headingDevice{{id}}">
+              <div class="col-md-8">
+                <h6 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordionDevices" href="#device{{id}}" aria-expanded="true" aria-controls="collapseOne">
+                    {{id}} : {{device.type}}
+                  </a>
+                </h6>
+              </div>
+              <div class="col-md-2 center"><button type="button" class="btn btn-primary">Edit</button></div>
+              <div class="col-md-2 center"><button type="button" class="btn btn-default" ng-click="deleteDevice(id)"><img class="small-square" src="flat-color-icons/cancel.svg"></button></div>
+            </div>
+            <div id="device{{id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+              <div class="panel-body">
+                <ul>
+                  <li ng-repeat="(paramName, param) in device.params">{{paramName}} : {{param}}</li>
+                </ul>
+              </div>
+            </div>
           </div>
-          <!--
-          <div class="col-md-1 center"><button type="button" class="btn btn-primary"><img class="small-square" src="flat-color-icons/collapse.svg"></button></div>
-          -->
-          <div class="col-md-1 center"><button type="button" class="btn btn-default"><img class="small-square" src="flat-color-icons/expand.svg"></button></div>
-          <div class="col-md-1 center"><button type="button" class="btn btn-primary">Edit</button></div>
-          <div class="col-md-1 center"><button type="button" class="btn btn-default" ng-click="deleteDevice(id)"><img class="small-square" src="flat-color-icons/cancel.svg"></button></div>
+          <!-- End of Repeat -->
         </div>
-        <!-- End of Repeat -->
       </div>
     </div>
   </div><!-- /.container -->
 
   <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script>
-    $('#activeScripts').css('height', $(window).height()-75);
-    $('#activeDevices').css('height', $(window).height()-75);
-    $('#activeScriptsContent').css('height', $(window).height()-200);
-    $('#activeDevicesContent').css('height', $(window).height()-200);
+    $('#yourScenarios').css('height', $(window).height()-75);
+    $('#yourDevices').css('height', $(window).height()-75);
+    $('#yourScenariosContent').css('height', $(window).height()-200);
+    $('#yourDevicesContent').css('height', $(window).height()-200);
   </script>
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
