@@ -88,14 +88,25 @@
           <div class="col-md-8">
             <h5>{{scenario.description}}</h5>
             <br/>
-            Trigger: {{scenario.trigger.description}}
+            Trigger: {{scenario.trigger.description}} : 
+              <div ng-repeat="(id, param) in scenario.trigger.params">
+                ({{id}} : {{param}})
+              </div>
             <br/>
             <ul>
-              <li ng-repeat="(id, action) in scenario.actions">{{action.description}}</li>
+              <li ng-repeat="(id, action) in scenario.actions">{{action.description}}
+                <ul>
+                  <li ng-repeat="(id, param) in action.params">{{id}} : {{param}}</li>
+                </ul>
+              </li>
             </ul>
           </div>
-          <!--<div class="col-md-2 center"><button type="button" class="btn btn-primary">Edit</button></div>-->
-          <div class="col-md-2 center"><button type="button" class="btn btn-danger" ng-click="deleteScript(id)">Delete</button></div>
+          <!--
+          <div class="col-md-1 center"><button type="button" class="btn btn-primary"><img class="small-square" src="flat-color-icons/collapse.svg"></button></div>
+          -->
+          <div class="col-md-1 center"><button type="button" class="btn btn-default"><img class="small-square" src="flat-color-icons/expand.svg"></button></div>
+          <div class="col-md-1 center"><button type="button" class="btn btn-primary">Edit</button></div>
+          <div class="col-md-1 center"><button type="button" class="btn btn-default" ng-click="deleteScript(id)"><img class="small-square" src="flat-color-icons/cancel.svg"></button></div>
         </div>
         <!-- End of Repeat -->
       </div>
@@ -145,11 +156,19 @@
       <div id="activeDevicesContent" class="row scrollable full-size">
         <!-- Repeat -->
         <div class="row spaced-row" ng-repeat="(id, device) in storage.yourDevices" ng-class-odd="'odd'" ng-class-even="'even'">
-          <div class="col-md-8 center">
+          <div class="col-md-8">
             {{id}} : {{device.type}}
+            <br/>
+            <ul>
+              <li ng-repeat="(paramName, param) in device.params">{{paramName}} : {{param}}</li>
+            </ul>
           </div>
-          <!--<div class="col-md-2 center"><button type="button" class="btn btn-primary">Edit</button></div>-->
-          <div class="col-md-2 center"><button type="button" class="btn btn-danger" ng-click="deleteDevice(id)">Delete</button></div>
+          <!--
+          <div class="col-md-1 center"><button type="button" class="btn btn-primary"><img class="small-square" src="flat-color-icons/collapse.svg"></button></div>
+          -->
+          <div class="col-md-1 center"><button type="button" class="btn btn-default"><img class="small-square" src="flat-color-icons/expand.svg"></button></div>
+          <div class="col-md-1 center"><button type="button" class="btn btn-primary">Edit</button></div>
+          <div class="col-md-1 center"><button type="button" class="btn btn-default" ng-click="deleteDevice(id)"><img class="small-square" src="flat-color-icons/cancel.svg"></button></div>
         </div>
         <!-- End of Repeat -->
       </div>

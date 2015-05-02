@@ -39,3 +39,7 @@ body {
   margin-bottom: 5px;
   margin-top: 5px;
 }
+.small-square{
+  width:18px;
+  height:18px;
+}
