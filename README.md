@@ -114,3 +114,4 @@ Triggers can be made using a on("event") with a check inside (if statement that 
 ##Links to Supporting Modules
 
 * The wemo devices folder is a submodule based off of [Stormboy's node-upnp-controlpoint](https://github.com/stormboy/node-upnp-controlpoint)
+* Some of the icons in the Web UI come from [Free icons by Icons8](https://icons8.com/)

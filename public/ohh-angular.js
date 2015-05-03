@@ -9,11 +9,19 @@
       .controller('ActiveScriptContentController', ['$scope', 'MyJsonService', function($scope, MyJsonService) {
         $scope.storage = MyJsonService.get();
 
-        $scope.setScript = function(selectedScript){
-          console.log("SetScript Called");
-          console.log(selectedScript);
+        $scope.setTriggerDevice = function(triggerDevice){
+          console.log("setTriggerDevice Called");
+          console.log(triggerDevice);
 
-          $scope.selectedScript = $scope.storage.scripts[selectedScript];
+          $scope.selectedTriggerDevice = $scope.storage.yourDevices[triggerDevice];
+          $scope.selectedTriggerDeviceType = $scope.storage.deviceTypes[$scope.selectedTriggerDevice.type];
+        };
+
+        $scope.setTriggerFunction = function(triggerFunction){
+          console.log("setTriggerFunction Called");
+          console.log(triggerFunction);
+
+          $scope.selectedTriggerFunctionParams = $scope.selectedTriggerDeviceType.triggers[triggerFunction];
         };
 
         $scope.findDevicesMatching = function (param) {
@@ -33,35 +41,34 @@
         };
 
         // saving a new script
-        $scope.createScript = function (newScriptName, newScript) {
+        $scope.createScenario = function (newScenario) {
           console.log("createScript");
-          console.log(newScriptName);
-          console.log(newScript);
+          console.log(newScenario);
 
           // re-organize the params into an array instead of dictionary
           var params = [];
-          for (var temp in newScript.params)
+          for (var temp in newScenario.params)
           {
-            params.push(newScript.params[temp]);
+            params.push(newScenario.params[temp]);
           }
-          newScript.params = params;
+          newScenario.params = params;
 
-          $scope.storage.activeScripts[newScriptName] = newScript;
-          console.log($scope.storage.activeScripts);
+          $scope.storage.yourScenarios.push(newScenario);
+          console.log($scope.storage.yourScenarios);
           $scope.storage.$save();
         };
 
         // removing a script
-        $scope.deleteScript = function (script) {
-          scriptData = angular.copy(script); // strips the $$hashkey included by ng-repeat
-          console.log("deleteScript called");
-          console.log(script);
-          console.log(scriptData);
+        $scope.deleteScenario = function (scenario) {
+          scenarioData = angular.copy(scenario); // strips the $$hashkey included by ng-repeat
+          console.log("deleteScenario called");
+          console.log(scenario);
+          console.log(scenarioData);
           console.log($scope.storage);
-          console.log($scope.storage.activeScripts);
+          console.log($scope.storage.yourScenarios);
           
           // Find and remove item from an array
-          delete $scope.storage.activeScripts[script];
+          delete $scope.storage.yourScenarios[scenario];
 
           //console.log($scope.storage.activeScripts.indexOf(script));
           //var i = $scope.storage.activeScripts.indexOf(script);
