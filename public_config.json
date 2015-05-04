@@ -1,5 +1,12 @@
 {
     "deviceTypes": {
+        "WeatherUnderground":{ 
+          "params":["null"],
+          "triggers":{
+          },
+          "actions":{
+          }
+        },
         "SparkButton": {
             "params": [
                 "Device ID"

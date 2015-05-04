@@ -5,6 +5,7 @@ deviceTypeMap["Test"] = require('./devices/Test.js');
 deviceTypeMap["Clock"] = require('./devices/Clock.js');
 deviceTypeMap["Wemo"] = require('./devices/Wemo.js');
 deviceTypeMap["SparkButton"] = require('./devices/SparkButton.js');
+deviceTypeMap["WeatherUnderground"] = require("./devices/WeatherUnderground.js");
 // TODO: Add new device types that you create here
 
 // populated by config file
