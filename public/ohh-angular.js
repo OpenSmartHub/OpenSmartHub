@@ -124,6 +124,8 @@
           console.log("createDevice Called");
           $scope.storage.yourDevices[newDeviceName] = newDevice;
           $scope.storage.$save();
+          $scope.newDevice = {};
+          $scope.newDeviceName = "";
         };
 
         // removing a script

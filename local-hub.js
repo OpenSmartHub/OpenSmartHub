@@ -4,6 +4,8 @@ var deviceTypeMap = {};
 deviceTypeMap["Test"] = require('./devices/Test.js');
 deviceTypeMap["Clock"] = require('./devices/Clock.js');
 deviceTypeMap["Wemo"] = require('./devices/Wemo.js');
+deviceTypeMap["SparkButton"] = require('./devices/SparkButton.js');
+// TODO: Add new device types that you create here
 
 // populated by config file
 var deviceTypeDictionary = {};
@@ -56,7 +58,6 @@ var AddRunningScenario = function(triggerDevice, customTriggerName, scenario)
     for (var actionId in scenario.actions)
     {
       var action = scenario.actions[actionId];
-      console.log("--------------------------------");
       console.log("action");
       console.log(action);
 
@@ -100,11 +101,11 @@ var PopulateRunningDictionaries = function()
       runningDevicesDictionary[nameOfYourDevice] = new deviceTypeMap[type](params);
     }
   }
+  console.log("--------------------------------");
   // Populate the script dictionaries
   for (scenarioId in yourScenariosDictionary)
   {
     var scenario = yourScenariosDictionary[scenarioId];
-    console.log("--------------------------------");
     console.log("scenario");
     console.log(scenario);
     console.log("trigger")
