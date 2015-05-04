@@ -43,5 +43,10 @@
   module.exports = NewDevice;
   ```
 0. Add it's device type to the config file if you want to use this kind of device.
+0. Add it to the `local-hub.js` like so:
+
+  ```
+  deviceTypeMap["NewDevice"] = require('./devices/NewDevice.js');
+  ```
 
 [Go Back](README.md)
