@@ -30,3 +30,6 @@ node_modules
 config.js
 *.zip
 *.bin
+
+securityCredentials.js
+config.json
