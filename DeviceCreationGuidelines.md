@@ -1,7 +1,6 @@
 #Device Creation Guidelines
 
-0. Make a new javascript file for the new device type.
-0. Create the new Device Object Type like so:
+0. Make a new javascript file for the new device type by following the example below or `NewDeviceExample.js`.
   ```
   /* 
   // Device Type - this is used for reference
@@ -9,7 +8,7 @@
       "params":["null"],
       "data":{
         "dataValueName":"dataValueType"
-      }
+      },
       "triggers":{
         "triggerFunctionName":["null"]
       },
@@ -43,7 +42,7 @@
   module.exports = NewDevice;
   ```
 0. Add it's device type to the config file if you want to use this kind of device.
-0. Add it to the `local-hub.js` like so:
+0. Add it to the `local-hub.js` using the following line:
 
   ```
   deviceTypeMap["NewDevice"] = require('./devices/NewDevice.js');
