@@ -31,6 +31,8 @@ function Clock() {
       Every ... hours/minutes/seconds/ms
   */
   EventEmitter.call(this); // This allows for events to be emitted
+  this.dispose = function(){
+  };
 };
 
 util.inherits(Clock, EventEmitter);

@@ -24,6 +24,19 @@ function SparkButton(params) {
   // console.log(this.deviceId);
 
   var self = this;
+  this.dispose = function(){
+    console.log("dispose function in spark button was called");
+    console.log(self.sparkDevice);
+    if(spark)
+    {
+      spark.removeAllListeners();
+    }
+    if(self.sparkDevice)
+    {
+      console.log("sparkDevice");
+      self.sparkDevice.removeAllListeners();      
+    }
+  };
 
   spark.login({username: securityCredentials.SparkUsername, password:  securityCredentials.SparkPassword});
 
@@ -53,7 +66,7 @@ var buttonTriggerParse = function(self, data, dataValueTrigger, customName){
 SparkButton.prototype.sparkButtonTrigger = function(customName, params){
   var self = this;
   var dataValueTrigger = params["triggeredOn/triggeredOff/both"];
-
+  console.log('-----------------------------TRIGGERRRRR-----------------------------');
   if(typeof sparkDevice == "undefined")
   {
     spark.once('login', function(err, body) {

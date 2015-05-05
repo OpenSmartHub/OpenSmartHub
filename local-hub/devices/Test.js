@@ -25,6 +25,8 @@ function Test() {
       }
     }
   };
+  this.dispose = function(){
+  };
 };
 
 util.inherits(Test, EventEmitter);

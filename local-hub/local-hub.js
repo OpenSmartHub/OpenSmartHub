@@ -67,6 +67,7 @@ var ClearRunningDictionaries = function(){
   for (var deviceName in runningDevicesDictionary) {
     var device = runningDevicesDictionary[deviceName];
     device.removeAllListeners();
+    device.dispose();
     device = null;
   }
 

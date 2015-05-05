@@ -24,13 +24,17 @@
   var EventEmitter = require('events').EventEmitter;
 
   function NewDevice(params) {
+    EventEmitter.call(this); // This allows for events to be emitted
     // TODO: Add code to handle params
     this.dataValueName = 0; // This will expose values
-    EventEmitter.call(this); // This allows for events to be emitted
+
+    this.dispose = function(){
+      // TODO: any disposal needed for this device
+    };
   };
 
   util.inherits(NewDevice, EventEmitter);
-  
+
   // Trigger Example
   NewDevice.prototype.triggerFunctionName = function(customName, params){
     // TODO: Add code here
@@ -40,7 +44,7 @@
   NewDevice.prototype.actionFunctionName = function(params){
     // TODO: Add code here
   };
-  
+
   module.exports = NewDevice;
   ```
 0. Add it's device type to the config file if you want to use this kind of device.

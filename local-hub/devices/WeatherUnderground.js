@@ -26,6 +26,8 @@ function WeatherUnderground(params) {
 
   EventEmitter.call(this); // This allows for events to be emitted
   continualDataUpdate(180000); // Every 3 minutes
+  this.dispose = function(){
+  };
 };
 
 util.inherits(WeatherUnderground, EventEmitter);

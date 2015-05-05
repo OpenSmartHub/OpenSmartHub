@@ -46,6 +46,9 @@ function Wemo(params) {
     }
   });
   cp.search();
+
+  this.dispose = function(){
+  };
 };
 
 util.inherits(Wemo, EventEmitter);

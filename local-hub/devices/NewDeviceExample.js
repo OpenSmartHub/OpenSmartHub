@@ -18,9 +18,13 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
 function NewDevice(params) {
+  EventEmitter.call(this); // This allows for events to be emitted
   // TODO: Add code to handle params
   this.dataValueName = 0; // This will expose values
-  EventEmitter.call(this); // This allows for events to be emitted
+
+  this.dispose = function(){
+    // TODO: any disposal needed for this device
+  };
 };
 
 util.inherits(NewDevice, EventEmitter);
