@@ -1,0 +1,11 @@
+{
+  "name": "ohh",
+  "version": "0.0.1",
+  "description": "the local hub in a split-hub architecture for the open source home hub",
+  "dependencies": {
+    "socket.io": "*",
+    "socket.io-client": "*",
+    "express": "*",
+    "spark": "*"
+  }
+}

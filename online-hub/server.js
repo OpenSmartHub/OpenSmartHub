@@ -20,6 +20,21 @@ fs.readFile('./config.json', 'utf8', function (err, data) {
   console.log(fileData);
 });
 
+fs.watch('./config.json', function (event, filename) {
+  console.log('config.json watcher "' + event + '" triggered');
+  fs.readFile('./config.json', 'utf8', function (err, data) {
+    if (err) throw err;
+    console.log('data');
+    fileData = JSON.parse(data);
+
+    if (typeof connectedSocket != 'undefined')
+    {
+      console.log("Sending the stored data to local-hub");
+      connectedSocket.emit('config', data);
+    }
+  });
+});
+
 // Routing
 app.use(express.static(__dirname + '/public'));
 
@@ -40,11 +55,6 @@ app.post('/storage', function(req, res) {
       if (err) throw err;
       console.log('It\'s saved!');
     });
-
-    if(connectionEstablished)
-    {
-      connectedSocket.emit('data', JSON.stringify(fileData));
-    }
   });
 });
 
@@ -54,19 +64,12 @@ io.on('connection', function (socket) {
   connectedSocket = socket;
 
   console.log("connection established");
-  //socket.emit('message', { user: 'online-hub', msg: 'you there?' });
   
   // emit the message containing the data
   if (typeof fileData != 'undefined')
   {
-    socket.emit('data', JSON.stringify(fileData));
+    socket.emit('config', JSON.stringify(fileData));
   }
-
-  // Success!  Now listen to messages to be received
-  socket.on('message',function(event){ 
-    console.log('Received message from client!',event);
-    socket.emit('message', { user: 'online-hub', msg: 'hello?' });
-  });
 
   socket.on('disconnect',function(){
     console.log('client has disconnected');

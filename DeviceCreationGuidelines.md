@@ -1,6 +1,8 @@
 #Device Creation Guidelines
 
 0. Make a new javascript file for the new device type by following the example below or `NewDeviceExample.js`.
+  Note: All devices need to be based off the EventEmitter regardless of whether they have triggers or not (for unity sake).
+
   ```
   /* 
   // Device Type - this is used for reference

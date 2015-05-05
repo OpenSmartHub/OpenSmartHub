@@ -1,6 +1,6 @@
 [submodule "local/automation_modules/devices/wemo"]
 	path = local/automation_modules/devices/wemo
 	url = https://github.com/anthony-ngu/node-upnp-controlpoint.git
-[submodule "devices/wemo"]
-	path = devices/wemo
+[submodule "local-hub/devices/wemo"]
+	path = local-hub/devices/wemo
 	url = https://github.com/anthony-ngu/node-upnp-controlpoint.git

@@ -1,3 +1,4 @@
+var io = require('socket.io-client');
 var fs = require('fs');
 
 var deviceTypeMap = {};
@@ -23,31 +24,55 @@ var ReadData = function(){
   fs.readFile('./config.json', 'utf8', function (err, data) {
     if (err) throw err;
     fileData = JSON.parse(data);
-    console.log(fileData);
+    // console.log(fileData);
 
     deviceTypeDictionary = fileData.deviceTypes;
     yourDevicesDictionary = fileData.yourDevices;
     yourScenariosDictionary = fileData.yourScenarios;
-    console.log("deviceTypeDictionary-----------------");
-    console.log(deviceTypeDictionary);
-    console.log("yourDevicesDictionary-----------------");
-    console.log(yourDevicesDictionary);
-    console.log("yourScenariosDictionary-----------------");
-    console.log(yourScenariosDictionary);
+    // console.log("deviceTypeDictionary-----------------");
+    // console.log(deviceTypeDictionary);
+    // console.log("yourDevicesDictionary-----------------");
+    // console.log(yourDevicesDictionary);
+    // console.log("yourScenariosDictionary-----------------");
+    // console.log(yourScenariosDictionary);
 
+    ClearRunningDictionaries();
     PopulateRunningDictionaries();
-    //RunRunningDictionaries();
   });
 };
 ReadData();
 
+fs.watch('./config.json', function (event, filename) {
+  console.log('event is: ' + event);
+  ReadData();
+});
+
+
+socket = io.connect('http://localhost:3000'); // For local debug
+//socket = io.connect('http://ohh.azurewebsites.net');
+console.log("connection requested");
+
+socket.on('config', function(data){
+  //TODO: check the hash of the two files for differences, if there is a difference, then make the change.
+  console.log('data');
+  console.log(data);
+  fs.writeFile('./config.json', data, function (err) {
+    if (err) throw err;
+    console.log('It\'s saved!');
+  });
+});
+
 var ClearRunningDictionaries = function(){
-  deviceTypeDictionary = {};
-  yourDevicesDictionary = {};
-  yourScenariosDictionary = {};
-  
+  // removes all the listeners for the specific triggerNames
+  for (var deviceName in runningDevicesDictionary) {
+    var device = runningDevicesDictionary[deviceName];
+    device.removeAllListeners();
+    device = null;
+  }
+
+  // clears them out
   runningDevicesDictionary = {};
-  runningScenarios = {};
+  runningScenarios = [];
 };
 
 // This needs to be outside of the PopulateRunningDictionaries function in order to make sure
@@ -59,8 +84,8 @@ var AddRunningScenario = function(triggerDevice, customTriggerName, scenario)
     for (var actionId in scenario.actions)
     {
       var action = scenario.actions[actionId];
-      console.log("action");
-      console.log(action);
+      // console.log("action");
+      // console.log(action);
 
       var actionDevice = runningDevicesDictionary[action.device];
       var actionName = action.action;
@@ -91,8 +116,8 @@ var PopulateRunningDictionaries = function()
     var defaultDevice = deviceTypeDictionary[type];
     // console.log("Default Device");
     // console.log(defaultDevice);
-    console.log("type");
-    console.log(type);
+    // console.log("type");
+    // console.log(type);
     // console.log("params");
     // console.log(params);
 
@@ -102,17 +127,17 @@ var PopulateRunningDictionaries = function()
       runningDevicesDictionary[nameOfYourDevice] = new deviceTypeMap[type](params);
     }
   }
-  console.log("--------------------------------");
+  // console.logconsole.log("--------------------------------");
   // Populate the script dictionaries
   for (scenarioId in yourScenariosDictionary)
   {
     var scenario = yourScenariosDictionary[scenarioId];
-    console.log("scenario");
-    console.log(scenario);
-    console.log("trigger")
-    console.log(scenario.trigger);
-    console.log("actions");
-    console.log(scenario.actions);
+    // console.log("scenario");
+    // console.log(scenario);
+    // console.log("trigger")
+    // console.log(scenario.trigger);
+    // console.log("actions");
+    // console.log(scenario.actions);
 
     var triggerDevice = runningDevicesDictionary[scenario.trigger.device];
     var triggerName = scenario.trigger.trigger;
@@ -126,15 +151,15 @@ var PopulateRunningDictionaries = function()
     {
       continue;
     }
-    console.log("--------------------------------");
-    console.log("triggerDevice");
-    console.log(triggerDevice);
-    console.log("triggerName")
-    console.log(triggerName);
-    console.log("customTriggerName");
-    console.log(customTriggerName);
-    console.log("triggerParams");
-    console.log(triggerParams);
+    // console.log("--------------------------------");
+    // console.log("triggerDevice");
+    // console.log(triggerDevice);
+    // console.log("triggerName")
+    // console.log(triggerName);
+    // console.log("customTriggerName");
+    // console.log(customTriggerName);
+    // console.log("triggerParams");
+    // console.log(triggerParams);
 
     triggerDevice[triggerName](customTriggerName, triggerParams); // this sets up the trigger event
 

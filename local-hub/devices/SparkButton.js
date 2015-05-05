@@ -24,16 +24,6 @@ function SparkButton(params) {
   // console.log(this.deviceId);
 
   var self = this;
-  spark.on('login', function(err, body) {
-    spark.listDevices(function(err, devices) {
-      spark.getDevice(self.deviceId, function(err, device) {
-        // console.log('Device Id: ' + self.deviceId);
-        // console.log('Device: ');
-        // console.log(device);
-        self.sparkDevice = device;
-      });
-    });
-  });
 
   spark.login({username: securityCredentials.SparkUsername, password:  securityCredentials.SparkPassword});
 
@@ -66,13 +56,14 @@ SparkButton.prototype.sparkButtonTrigger = function(customName, params){
 
   if(typeof sparkDevice == "undefined")
   {
-    spark.on('login', function(err, body) {
+    spark.once('login', function(err, body) {
       spark.listDevices(function(err, devices) {
         spark.getDevice(self.deviceId, function(err, device) {
-          // console.log('SparkDevice-----------------------------');
-          // console.log(device);
+          console.log('SparkDevice-----------------------------');
+          console.log(device);
           self.sparkDevice = device;
           self.sparkDevice.onEvent('button', function(data) {
+            console.log("button event triggered");
             buttonTriggerParse(self, data, dataValueTrigger, customName);
           });
         });
@@ -80,6 +71,7 @@ SparkButton.prototype.sparkButtonTrigger = function(customName, params){
     });
   }else{
     self.sparkDevice.onEvent('button', function(data) {
+      console.log("button event triggered");
       buttonTriggerParse(self, data, dataValueTrigger, customName);
     });
   }
