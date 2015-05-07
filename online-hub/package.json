@@ -6,6 +6,15 @@
     "socket.io": "*",
     "socket.io-client": "*",
     "express": "*",
-    "spark": "*"
+    "spark": "*",
+    "passport": "*",
+    "passport-github2":"*",
+    "passport.socketio":"*",
+    "ejs":"*",
+    "morgan":"*",
+    "express-session":"*",
+    "body-parser":"*",
+    "cookie-parser":"*",
+    "method-override":"*"
   }
 }
