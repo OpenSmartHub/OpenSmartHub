@@ -5,16 +5,22 @@ var express = require('express')
   , port = process.env.PORT || 3000
   , fs = require('fs')
   , passport = require('passport')
-  , util = require('util')
   , session = require('express-session')
+  , util = require('util')
   , GitHubStrategy = require('passport-github2').Strategy
   , securityCredentials = require('./securityCredentials.js');
 
+// Variables for the connected socket (from local-hub)
 var connectionEstablished = false;
 var connectedSocket;
 
-var AllowedUsers = ["anthony-ngu"];
+// This is the list of allowed users
+var AllowedUsers = [
+  {"username":securityCredentials.USERACCOUNT_NAME, "secret":securityCredentials.USERACCOUNT_KEY}
+  // CUSTOM: add more users if you want multiple people to have access
+];
 
+// Creates the website server on the port #
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
 });
@@ -37,21 +43,23 @@ passport.deserializeUser(function(obj, done) {
 // configure Express
 app.set('views', __dirname + '/views');
 app.set('view engine', 'html');
-app.use(session({ 
+
+// Setting up Passportjs
+app.use(session({
+  key: 'express.sid',
   secret: securityCredentials.SESSION_SECRET,
   resave: false,
   saveUninitialized: false}));
 app.use(passport.initialize());
 app.use(passport.session());
-
 passport.use(new GitHubStrategy({
     clientID: securityCredentials.GITHUB_CLIENT_ID,
     clientSecret: securityCredentials.GITHUB_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/github/callback"
+    callbackURL: "http://YOUR_AZURE_WEBSITE.azurewebsites.net/auth/github/callback" // CUSTOM: add your own website URL (or localhost for debug) as the callbackUrl
   },
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
-      if(AllowedUsers.indexOf(profile.username) != -1)
+      if(FindIndexOfAuthenticatedUser(profile.username) != -1)
       {
         console.log("username found");
         // To keep the example simple, the user's GitHub profile is returned to
@@ -67,14 +75,27 @@ passport.use(new GitHubStrategy({
   }
 ));
 
-// Reads the storage file
+// Helper function to find the index of the username (if there is one)
+function FindIndexOfAuthenticatedUser(username){
+  var i = 0;
+  while (i < AllowedUsers.length) {
+    if(AllowedUsers[i].username == username){
+      return i;
+    }
+    i += 1;
+  }
+  return -1;
+}
+
+// Config File Handling
 var fileData;
+// Initial parse of config file
 fs.readFile('./config.json', 'utf8', function (err, data) {
   if (err) throw err;
   fileData = JSON.parse(data);
   console.log(fileData);
 });
-
+// Watches the config file for changes, then re-parses the updated config file
 fs.watch('./config.json', function (event, filename) {
   console.log('config.json watcher "' + event + '" triggered');
   fs.readFile('./config.json', 'utf8', function (err, data) {
@@ -82,6 +103,7 @@ fs.watch('./config.json', function (event, filename) {
     console.log('data');
     fileData = JSON.parse(data);
 
+    // if there is a connectedSocket, it will emit the config event
     if (typeof connectedSocket != 'undefined')
     {
       console.log("Sending the stored data to local-hub");
@@ -90,18 +112,18 @@ fs.watch('./config.json', function (event, filename) {
   });
 });
 
-// Routing
+// Express Routing
 app.use(express.static(__dirname + '/public'));
 app.engine('html', require('ejs').renderFile);
 
 // Handles Retrieval of the json file
-app.get('/storage', ensureAuthenticated, function(req, res) {
+app.get('/config', ensureAuthenticated, function(req, res) {
   //console.log(req);
   res.send(fileData);
 });
 
 // Handles updates to the json file
-app.post('/storage', ensureAuthenticated, function(req, res) {
+app.post('/config', ensureAuthenticated, function(req, res) {
   var requestBody = "";
   req.on('data', function(data) {
     requestBody += data;
@@ -114,14 +136,14 @@ app.post('/storage', ensureAuthenticated, function(req, res) {
   });
 });
 
+// Handles the website's authorization paths
 app.get('/auth/github',
-  passport.authenticate('github'));
+  passport.authenticate('github', { scope: [ 'user:email' ] }));
 
 app.get('/auth/github/callback', 
   passport.authenticate('github', { successRedirect: '/', failureRedirect: '/login', failureFlash: true }));
 
 app.get('/', ensureAuthenticated, function(req, res){
-  console.log("index.html loaded");
   res.render('index', { user: req.user });
 });
 
@@ -147,18 +169,64 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/login')
 }
 
-// Handles websocket connection to the local brain
-io.on('connection', function (socket) {
+// Handles websocket connection authentication to the local brain
+require('socketio-auth')(io, {
+  authenticate: authenticate, 
+  postAuthenticate: postAuthenticate,
+  timeout: 1000
+});
+
+function authenticate(data, callback) {
+  console.log("authenticate called");
+  var username = data.username;
+  var secret = data.secret;
+  var userIndex = FindAuthenticateUserInAllowedUsers(username, secret);
+  if(userIndex == -1){
+    return callback(new Error("User not found"));
+  }else{
+    return callback(null, AllowedUsers[userIndex]);//user.secret == secret);    
+  }
+}
+
+function postAuthenticate(socket, data) {
+  console.log("postAuthenticate called");
+  var username = data.username;
+  var secret = data.secret;
+  var userIndex = FindAuthenticateUserInAllowedUsers(username, secret);
+  if(userIndex != -1){
+    socket.client.user = username;
+  }
+
+  console.log('authenticated connection established');
   connectionEstablished = true;
   connectedSocket = socket;
 
-  console.log("connection established");
-  
   // emit the message containing the data
   if (typeof fileData != 'undefined')
   {
     socket.emit('config', JSON.stringify(fileData));
   }
+
+  socket.emit("hello", "welcome!");
+}
+
+function FindAuthenticateUserInAllowedUsers(username, secret){
+  var i = 0;
+  while (i < AllowedUsers.length) {
+    if(
+      (AllowedUsers[i].username == username)&&
+      (AllowedUsers[i].secret == secret)){
+      console.log("username found with the correct secret");
+      return i;
+    }
+    i += 1;
+  }
+  console.log("authenticated user not found");
+  return -1;
+}
+
+io.on('connection', function (socket) {
+  console.log("connection established");
 
   socket.on('disconnect',function(){
     console.log('client has disconnected');

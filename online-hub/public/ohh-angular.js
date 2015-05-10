@@ -2,7 +2,7 @@
   angular
     .module('ohh', ['ngResource']);
   angular.module('ohh').factory('MyJsonService', ['$resource', function($resource) {
-    return $resource('/storage');
+    return $resource('/config');
   }]);
   angular
     .module('ohh')

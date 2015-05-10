@@ -1,5 +1,6 @@
 var io = require('socket.io-client');
 var fs = require('fs');
+var securityCredentials = require('./securityCredentials.js');
 
 var deviceTypeMap = {};
 deviceTypeMap["Test"] = require('./devices/Test.js');
@@ -48,9 +49,14 @@ fs.watch('./config.json', function (event, filename) {
 });
 
 
-socket = io.connect('http://localhost:3000'); // For local debug
-//socket = io.connect('http://ohh.azurewebsites.net');
+//socket = io.connect('http://localhost:3000'); // For local debug
+socket = io.connect('http://ohh.azurewebsites.net');
+
+socket.on('connect', function(){
+  socket.emit('authentication', {username: securityCredentials.USERACCOUNT_NAME, secret: securityCredentials.USERACCOUNT_KEY});
+});
 console.log("connection requested");
+
 
 socket.on('config', function(data){
   //TODO: check the hash of the two files for differences, if there is a difference, then make the change.
