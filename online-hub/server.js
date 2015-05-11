@@ -15,10 +15,7 @@ var connectionEstablished = false;
 var connectedSocket;
 
 // This is the list of allowed users
-var AllowedUsers = [
-  {"username":securityCredentials.USERACCOUNT_NAME, "secret":securityCredentials.USERACCOUNT_KEY}
-  // CUSTOM: add more users if you want multiple people to have access
-];
+var AllowedUsers = securityCredentials.allowedUsers;
 
 // Creates the website server on the port #
 server.listen(port, function () {
@@ -55,7 +52,7 @@ app.use(passport.session());
 passport.use(new GitHubStrategy({
     clientID: securityCredentials.GITHUB_CLIENT_ID,
     clientSecret: securityCredentials.GITHUB_CLIENT_SECRET,
-    callbackURL: "http://YOUR_AZURE_WEBSITE.azurewebsites.net/auth/github/callback" // CUSTOM: add your own website URL (or localhost for debug) as the callbackUrl
+    callbackURL: securityCredentials.CALLBACK_URL
   },
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {

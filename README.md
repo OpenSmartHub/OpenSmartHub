@@ -32,9 +32,6 @@ It uses Azure Websites, a local hub device (can be anything that runs Node.js), 
 ####Devices
 * These are your smart home devices. They can be anything from a NEST thermostat, WeMo switches, SmartThings devices, or even your own self-made projects.
 
-####WeatherUnderground API
-* This is used to gain accurate weather data about your area, the forecasts, and any warnings.
-
 ###How is it different?
 There are other open source automation projects but **the key to the Open source Home Hub is that it is designed to be simple yet you can control every part! Easily follow step by step directions to get it set up and contribute!**
 
@@ -44,11 +41,11 @@ There are other open source automation projects but **the key to the Open source
 
 ###Currently Supported Devices:
   * Spark maker projects (Button, Motion, RGB Strip)
-  * WeMo (if the hub is run on a local network)
+  * WeMo
   * WeatherUnderground APIs for local astronomical and weather forecasts
+  * Clock for time related triggers and data
 
 ###Near Future:
-  * WeMo (through the cloud hub)
   * Any device that can make a HTTP POST call
   * Any device hooked up to IFTTT
 
