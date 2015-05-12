@@ -2,6 +2,8 @@
 exports.USERACCOUNT_NAME = 'YOUR_USERNAME';
 exports.USERACCOUNT_KEY = 'YOUR_KEY_ON_SERVER';
 
+exports.WEBSITE_URL = "http://YOUR_AZURE_WEBSITE.azurewebsites.net";
+
 // Optional: These are for various servies/devices
 exports.SparkUsername = "SPARK_USERNAME";
 exports.SparkPassword = "SPARK_PASSWORD";

@@ -2,6 +2,9 @@
   // Device Type
   "Wemo":{ 
       "params":["name"],
+      "data":{
+        "state":"on/off"
+      },
       "triggers":{
         "toggledTrigger":["on/off/both"]
       },
@@ -22,6 +25,9 @@ function Wemo(params) {
   this.name = params["name"];
   this.wemoDevice = null;
 
+  this.data = {};
+  this.data.state = "off";
+
   // This will wait for a response from the control point with the devices
   cp.on("device", function(device){
     if(!self.wemoDevice) // to prevent repetitive device registrations
@@ -34,6 +40,19 @@ function Wemo(params) {
         cp.devices[tempDevice].deviceType == wemoStructure.WemoControllee.deviceType) // This checks to see if it is a switch
         {
           self.wemoDevice = new wemoStructure.WemoControllee(cp.devices[tempDevice]); // handle to the wemo device you specified
+
+          self.wemoDevice.eventService.on("stateChange", function(value)
+          {
+            if (value["BinaryState"] == "1")
+            { 
+              self.data.state = "on";
+            }
+            else if (value["BinaryState"] == "0")
+            {
+              self.data.state = "off";
+            }
+          });
+
           console.log("device found");
           self.emit("deviceFound");
         }

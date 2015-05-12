@@ -24,17 +24,19 @@ function SparkButton(params) {
   // console.log(this.deviceId);
 
   var self = this;
+  this.data = {};
+
   this.dispose = function(){
     console.log("dispose function in spark button was called");
     console.log(self.sparkDevice);
-    if(spark)
-    {
-      spark.removeAllListeners();
-    }
     if(self.sparkDevice)
     {
       console.log("sparkDevice");
       self.sparkDevice.removeAllListeners();      
+    }
+    if(spark)
+    {
+      spark.removeAllListeners();
     }
   };
 

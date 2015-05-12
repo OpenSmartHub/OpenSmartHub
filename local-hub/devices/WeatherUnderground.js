@@ -2,13 +2,16 @@
   // Device Type
   "WeatherUnderground":{ 
       "params":["null"],
-      "data":[
-        "data"
-      ],
+      "data":{
+        "temp_f" : "int",
+        "sunriseHour" : "int",
+        "sunriseMinute" : "int",
+        "sunsetHour" : "int",
+        "sunsetMinute" : "int"
+      },
       "triggers":{
       },
       "actions":{
-
       }
     }
 */
@@ -22,11 +25,19 @@ function WeatherUnderground(params) {
   // we need to store the reference of `this` to `self`, so that we can use the current context in the setTimeout (or any callback) functions
   // using `this` in the setTimeout functions will refer to those funtions, not the class
   var self = this;
-  this.data;
+  this.data = {};
+  this.data.temp_f = -1;
+  this.data.sunriseHour = -1;
+  this.data.sunriseMinute = -1;
+  this.data.sunsetHour = -1;
+  this.data.sunsetMinute = -1;
+
+  getWeatherUndergroundData();
 
   EventEmitter.call(this); // This allows for events to be emitted
   continualDataUpdate(180000); // Every 3 minutes
   this.dispose = function(){
+
   };
 };
 
@@ -53,6 +64,13 @@ var getWeatherUndergroundData = function() {
       console.log(result.moon_phase.sunrise.minute);
       console.log(result.moon_phase.sunset.hour);
       console.log(result.moon_phase.sunset.minute);
+
+      self.data.temp_f = result.current_observation.temp_f;
+      self.data.sunriseHour = result.moon_phase.sunrise.hour;
+      self.data.sunriseMinute = result.moon_phase.sunrise.minute;
+      self.data.sunsetHour = result.moon_phase.sunset.hour;
+      self.data.sunsetMinute = result.moon_phase.sunset.minute;
+
       for(var i=0;i<3;i++)
       {
         console.log(result.forecast.txt_forecast.forecastday[i].title);
