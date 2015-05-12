@@ -2,6 +2,14 @@
   // Device Type
   "Clock":{ 
       "params":["null"],
+      "data":{
+        "year":"int",
+        "month":"int",
+        "day":"int",
+        "hour":"int",
+        "minute":"int",
+        "second":"int",
+      },
       "triggers":{
         "specificDateTrigger":["year","month","day","hour","minutes","seconds","milliseconds"],
         "yearlyTrigger":["month","day","hour","minutes","seconds"],
@@ -31,11 +39,25 @@ function Clock() {
       Every ... hours/minutes/seconds/ms
   */
   EventEmitter.call(this); // This allows for events to be emitted
+
+  this.data = {};
+  this.data.year = new Date().getFullYear();
+  this.data.month = new Date().getMonth()+1;
+  this.data.day = new Date().getDate();
+  this.data.hour = new Date().getHours();
+  this.data.minute = new Date().getMinutes();
+  this.data.second = new Date().getSeconds();
+
   this.dispose = function(){
   };
 };
 
 util.inherits(Clock, EventEmitter);
+
+var continualDataUpdate = function(milliseconds){
+  setInterval(getWeatherUndergroundData(), milliseconds);
+};
+
 Clock.prototype.specificDateTrigger = function(customName, params){
   var year = params["year"];
   var month = params["month"];

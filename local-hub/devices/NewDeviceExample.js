@@ -19,8 +19,12 @@ var EventEmitter = require('events').EventEmitter;
 
 function NewDevice(params) {
   EventEmitter.call(this); // This allows for events to be emitted
+
   // TODO: Add code to handle params
-  this.dataValueName = 0; // This will expose values
+
+  // Data example
+  this.data = {}; //  this needs to be done to instantiate a dictionary for the data
+  this.data.valueName = 0; // This will expose values
 
   this.dispose = function(){
     // TODO: any disposal needed for this device

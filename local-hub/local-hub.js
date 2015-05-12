@@ -50,7 +50,7 @@ fs.watch('./config.json', function (event, filename) {
 
 
 //socket = io.connect('http://localhost:3000'); // For local debug
-socket = io.connect('http://ohh.azurewebsites.net');
+socket = io.connect(securityCredentials.WEBSITE_URL);
 
 socket.on('connect', function(){
   socket.emit('authentication', {username: securityCredentials.USERACCOUNT_NAME, secret: securityCredentials.USERACCOUNT_KEY});
@@ -87,22 +87,48 @@ var ClearRunningDictionaries = function(){
 var AddRunningScenario = function(triggerDevice, customTriggerName, scenario)
 {
   runningScenarios.push(triggerDevice.on(customTriggerName, function() {
-    // executes the list of actions
-    for (var actionId in scenario.actions)
+    // Check the conditionals
+    var listOfConditionals = scenario.trigger.conditionals;
+    // console.log("list of conditionals");
+    // console.log(listOfConditionals);
+    var conditionalResult = true;
+    for (var index in listOfConditionals)
     {
-      var action = scenario.actions[actionId];
-      // console.log("action");
-      // console.log(action);
-
-      var actionDevice = runningDevicesDictionary[action.device];
-      var actionName = action.action;
-      var actionParams = action.params;
-
-      if(!actionDevice) // skips any action that has a non-existant action device
+      var conditional = listOfConditionals[index];
+      // console.log("Conditional");
+      // console.log(conditional);
+      var conditionalDevice = runningDevicesDictionary[conditional.device];
+      if(conditionalDevice.data[conditional.data] != conditional.expectedValue)
       {
-        continue;
+        conditionalResult = false;
+        //print the mismatch for debug
+        // console.log("conditional failed");
+        // console.log("expectedValue: " + conditional.expectedValue);
+        // console.log("actualValue: " + conditionalDevice.data[conditional.data])
+      }else{
+        // console.log("conditional true");
       }
-      actionDevice[actionName](actionParams);
+    }
+
+    if(conditionalResult)
+    {
+      // executes the list of actions
+      for (var actionId in scenario.actions)
+      {
+        var action = scenario.actions[actionId];
+        // console.log("action");
+        // console.log(action);
+
+        var actionDevice = runningDevicesDictionary[action.device];
+        var actionName = action.action;
+        var actionParams = action.params;
+
+        if(!actionDevice) // skips any action that has a non-existant action device
+        {
+          continue;
+        }
+        actionDevice[actionName](actionParams);
+      }
     }
   }));
 };
