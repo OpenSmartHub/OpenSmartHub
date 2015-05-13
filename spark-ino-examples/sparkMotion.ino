@@ -1,12 +1,10 @@
 int motion = D0;
-// int light = A4;
-// int temp = A2;
+int led = D1;
 
 // This routine runs only once upon reset
 void setup() {
   pinMode(motion, INPUT);
-//   pinMode(light, INPUT);
-//  pinMode(temp, INPUT);
+  pinMode(led, OUTPUT);
 }
 
 // This routine gets called repeatedly, like once every 5-15 milliseconds.
@@ -14,10 +12,14 @@ void setup() {
 // Make sure none of your code delays or blocks for too long (like more than 5 seconds), or weird things can happen.
 void loop() {
     int motionValue = digitalRead(motion);
-    Spark.publish("motion", String(motionValue), 60, PRIVATE);
-
-    // Spark.publish("light", String(analogRead(light)));
-    // int tempValue = analogRead(temp);
-    // Spark.publish("temp", String(tempValue));
+    if(motionValue == HIGH)
+    {
+        Spark.publish("motion", "triggeredOn", 60, PRIVATE);//String(motionValue), 60, PRIVATE);
+        digitalWrite(led, HIGH);
+        delay(5000); // stops it from triggering repetitively from the same trigger
+    }else{
+        Spark.publish("motion", "triggeredOff", 60, PRIVATE);
+        digitalWrite(led, LOW);
+    }
     delay(1000);
 }

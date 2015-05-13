@@ -1,0 +1,169 @@
+{
+    "deviceTypes": {
+        "WeatherUnderground": {
+            "params": [
+                "null"
+            ],
+            "data": {
+                "temp_f": "int",
+                "sunriseHour": "int",
+                "sunriseMinute": "int",
+                "sunsetHour": "int",
+                "sunsetMinute": "int"
+            },
+            "triggers": {},
+            "actions": {}
+        },
+        "SparkButton": {
+            "params": [
+                "Device ID"
+            ],
+            "data": {},
+            "triggers": {
+                "sparkButtonTrigger": [
+                    "triggeredOn/triggeredOff/both"
+                ]
+            },
+            "actions": {}
+        },
+        "SparkMotion": {
+            "params": [
+                "Device ID"
+            ],
+            "data": {},
+            "triggers": {
+                "motionTrigger": [
+                    "triggeredOn/triggeredOff/both"
+                ]
+            },
+            "actions": {}
+        },
+        "Wemo": {
+            "params": [
+                "name"
+            ],
+            "data": {
+                "state": "on/off"
+            },
+            "triggers": {
+                "toggledTrigger": [
+                    "on/off/both"
+                ]
+            },
+            "actions": {
+                "timedToggle": [
+                    "on/off/both",
+                    "milliseconds"
+                ]
+            }
+        },
+        "Clock": {
+            "params": [
+                "null"
+            ],
+            "data": {
+                "year": "int",
+                "month": "int",
+                "day": "int",
+                "hour": "int",
+                "minute": "int",
+                "second": "int"
+            },
+            "triggers": {
+                "specificDateTrigger": [
+                    "year",
+                    "month",
+                    "day",
+                    "hour",
+                    "minutes",
+                    "seconds",
+                    "milliseconds"
+                ],
+                "yearlyTrigger": [
+                    "month",
+                    "day",
+                    "hour",
+                    "minutes",
+                    "seconds",
+                    "milliseconds"
+                ],
+                "monthlyTrigger": [
+                    "day",
+                    "hour",
+                    "minutes",
+                    "seconds",
+                    "milliseconds"
+                ],
+                "dailyTrigger": [
+                    "hour",
+                    "minutes",
+                    "seconds",
+                    "milliseconds"
+                ],
+                "intervalTrigger": [
+                    "hour",
+                    "minutes",
+                    "seconds",
+                    "milliseconds"
+                ]
+            },
+            "actions": {}
+        },
+        "Test": {
+            "params": [
+                "null"
+            ],
+            "data": {},
+            "triggers": {},
+            "actions": {
+                "hello": [
+                    "ArrayOfStrings"
+                ]
+            }
+        }
+    },
+    "yourDevices": {
+        "PST Clock": {
+            "type": "Clock",
+            "params": {}
+        },
+        "TestPrinter": {
+            "type": "Test",
+            "params": {}
+        }
+    },
+    "yourScenarios": [
+        {
+            "description": "Every 5 seconds say hello after 11pm",
+            "trigger": {
+                "description": "Every 5 seconds",
+                "device": "PST Clock",
+                "trigger": "intervalTrigger",
+                "customTrigger": "every5seconds",
+                "params": {
+                    "seconds": "5"
+                },
+                "conditionals": [
+                    {
+                        "device": "PST Clock",
+                        "data": "hour",
+                        "expectedValue": "23"
+                    }
+                ]
+            },
+            "actions": [
+                {
+                    "description": "print hello",
+                    "device": "TestPrinter",
+                    "action": "hello",
+                    "params": {
+                        "ArrayOfStrings": [
+                            "hi",
+                            "peace"
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

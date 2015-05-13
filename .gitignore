@@ -32,4 +32,3 @@ config.js
 *.bin
 
 securityCredentials.js
-config.json

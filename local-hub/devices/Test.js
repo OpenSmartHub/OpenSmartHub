@@ -1,13 +1,17 @@
 /* 
   // Device Type
-  "Test":{ 
-      "params":["null"],
-      "triggers":{
-      },
-      "actions":{
-        "hello":{"null"}
-      }
+  "Test": {
+    "params": [
+      "null"
+    ],
+    "data": {},
+    "triggers": {},
+    "actions": {
+      "hello": [
+        "ArrayOfStrings"
+      ]
     }
+  }
 */
 
 var util = require('util');
