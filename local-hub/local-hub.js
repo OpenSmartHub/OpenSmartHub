@@ -48,8 +48,6 @@ fs.watch('./config.json', function (event, filename) {
   ReadData();
 });
 
-
-//socket = io.connect('http://localhost:3000'); // For local debug
 socket = io.connect(securityCredentials.WEBSITE_URL);
 
 socket.on('connect', function(){
