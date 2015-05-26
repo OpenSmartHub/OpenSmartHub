@@ -33,6 +33,7 @@
   </nav>
 
   <div class="container">
+    <div ng-if="connectionStatus.connection">Connection Status: ON</div><div ng-if="!connectionStatus.connection">Connection Status: OFF</div>
     <div id="yourScenarios" class="col-md-6 left-border black-border full-size">
       <h3 style="display: inline-block;">Your Scenarios</h3>
       <button type="button" class="btn btn-success pull-right" style="margin-top:15px;" data-toggle="modal" data-target="#scenarioModal">+</button>

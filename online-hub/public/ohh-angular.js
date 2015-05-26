@@ -4,9 +4,14 @@
   angular.module('ohh').factory('MyJsonService', ['$resource', function($resource) {
     return $resource('/config');
   }]);
+  angular.module('ohh').factory('ConnectionStatus', ['$resource', function($resource){
+    return $resource('/connection_status');
+  }]);
   angular
     .module('ohh')
-      .controller('DashboardContentController', ['$scope', 'MyJsonService', function($scope, MyJsonService){
+      .controller('DashboardContentController', ['$scope', 'ConnectionStatus', 'MyJsonService', function($scope, ConnectionStatus, MyJsonService){
+        $scope.connectionStatus = ConnectionStatus.get();
+
         $scope.storage = MyJsonService.get();
         $scope.newScenario = {};
         $scope.selectedTriggerDeviceTriggersLength = 0;

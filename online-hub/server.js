@@ -133,6 +133,13 @@ app.post('/config', ensureAuthenticated, function(req, res) {
   });
 });
 
+app.get('/connection_status', ensureAuthenticated, function(req, res){
+  var connectionData = {
+      "connection": connectionEstablished
+  };
+  res.send(connectionData);
+});
+
 // Handles the website's authorization paths
 app.get('/auth/github',
   passport.authenticate('github', { scope: [ 'user:email' ] }));
