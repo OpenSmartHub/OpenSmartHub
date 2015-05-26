@@ -10,15 +10,25 @@ body {
   border-width: 4px;
   border-color: black;
 }
-.left-border{
-  border-right-width: 2px;
+@media (min-width: 992px) {
+  .left-border{
+    border-right-width: 2px;
+  }
+  .right-border{
+    border-left-width: 2px;
+  }
+  .center-border{
+    border-left-width: 2px;
+    border-right-width: 2px;
+  }
 }
-.right-border{
-  border-left-width: 2px;
-}
-.center-border{
-  border-left-width: 2px;
-  border-right-width: 2px;
+@media (max-width: 992px) {
+  .left-border{
+    border-bottom-width: 2px;
+  }
+  .right-border{
+    border-top-width: 2px;
+  }
 }
 .full-size{
   height:200px;
