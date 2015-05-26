@@ -34,7 +34,7 @@ There are three main components:
   * The required portion needs to match one of the users that you put in the online-hub `securityCredentials.js`. This setting allows only your local-hub to connect to the online-hub.
   * The optional portions are for connecting to devices/services
 0. Open up a terminal or command line window
-0. Change directories to the local-hub folder and run the command `npm install`
+0. If you are on a Mac or Linux machine run `sh installScript.sh`, if you are on a PC run `installScript.bat`. This will install the node modules needed in all the right places.
 0. Run the local-hub.js program using `node local-hub.js`
 0. Your local-hub is now setup!
 0. If you ever want to update the local-hub with the latest possible devices, the easiest way will be to copy and replace the files (don't delete since that will remove your securityCredentials javascript file.
