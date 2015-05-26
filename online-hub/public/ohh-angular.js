@@ -6,11 +6,15 @@
   }]);
   angular
     .module('ohh')
-      .controller('ActiveScriptContentController', ['$scope', 'MyJsonService', function($scope, MyJsonService) {
+      .controller('DashboardContentController', ['$scope', 'MyJsonService', function($scope, MyJsonService){
         $scope.storage = MyJsonService.get();
         $scope.newScenario = {};
         $scope.selectedTriggerDeviceTriggersLength = 0;
         $scope.selectedActionDeviceActionsLength = 0;
+        $scope.newScenario.actions = [];
+        var newAction = {};
+        var newDevice = {};
+        var newDeviceName = "";
 
         $scope.setTriggerDevice = function(triggerDevice){
           console.log("setTriggerDevice Called");
@@ -50,9 +54,9 @@
           console.log(action);
           console.log($scope.newScenario);
 
-          $scope.newScenario.actions = [];
           console.log($scope.newScenario.actions);
           $scope.newScenario.actions.push(action);
+          $scope.newAction = {};
         };
 
         $scope.findDevicesMatching = function (param) {
@@ -101,13 +105,6 @@
 
           $scope.storage.$save();
         };
-  }]);
-  angular
-    .module('ohh')
-      .controller('YourDevicesController', ['$scope', 'MyJsonService', function($scope, MyJsonService) {
-        $scope.storage = MyJsonService.get();
-        var newDevice = {};
-        var newDeviceName = "";
 
         $scope.setDevice = function(selectedDevice){
           console.log("SetDevice Called");
