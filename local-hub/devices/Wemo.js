@@ -32,7 +32,7 @@ function Wemo(params) {
   cp.on("device", function(device){
     if(!self.wemoDevice) // to prevent repetitive device registrations
     {
-      console.log("cp-devices");
+      console.log("-------cp-devices-------");
       for (var tempDevice in cp.devices) // finds all the devices on your network
       {
         console.log(cp.devices[tempDevice].friendlyName);
@@ -60,11 +60,19 @@ function Wemo(params) {
       // check if wemoDevice was not found (if not, log it)
       if(!self.wemoDevice)
       {
-        console.log("WeMo Device " + self.name + " not found.");        
+        console.log("WeMo Device \"" + self.name + "\" not found.");        
       }
     }
   });
-  cp.search();
+
+  var cpSearchInterval= setInterval(function(){
+    if(!self.wemoDevice)
+    {
+      cp.search();
+    }else{
+      clearInterval(cpSearchInterval);
+    }
+  }, 5000);
 
   this.dispose = function(){
   };
