@@ -27,10 +27,10 @@ There are three main components:
 0. Feel free to customize the login page to your own design whims.
 
 ##Setup the Local-Hub
-0. Install Nodejs on your local-hub machine
+0. Install Nodejs v0.10.28 on your local-hub machine
 0. Place the local-hub folder on the machine
 0. Open up a terminal or command line window
-0. If you are on a Mac or Linux machine run `sh installScript.sh`, if you are on a PC run `installScript.bat`. This will install the node modules needed in all the right places and rename `public_securityCredentials.js` to `securityCredentials.js`.
+0. If you are on a Mac or Linux machine run `sh install.sh`, if you are on a PC run `install.bat`. This will install the node modules needed in all the right places and rename `public_securityCredentials.js` to `securityCredentials.js`.
 0. Update `securityCredentials.js` with your own information
   * The contents of this file are used to connect to the various services / devices.
   * The required portion needs to match one of the users that you put in the online-hub `securityCredentials.js`. This setting allows only your local-hub to connect to the online-hub.
