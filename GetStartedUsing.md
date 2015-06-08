@@ -48,6 +48,7 @@ There are three main components:
 0. Go to a browser and enter your website's url
 0. Login using the authentication method of your choice. (I used Github)
 0. Add scenarios or devices using the buttons on the website.
+  * Some devices will require IP Addresses. If this is the case, you can find your device's IP Address in your router's webpage.
 0. Any changes you make will automatically be sent to your local-hub!
 
 ##If you want to contribute to our device library or add your own devices, learn more in the [Device Creation Guidelines](DeviceCreationGuidelines.md)
