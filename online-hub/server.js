@@ -13,6 +13,7 @@ var express = require('express')
 // Variables for the connected socket (from local-hub)
 var connectionEstablished = false;
 var connectedSocket;
+var configModifiedTime;
 
 // This is the list of allowed users
 var AllowedUsers = securityCredentials.allowedUsers;
@@ -92,21 +93,10 @@ fs.readFile('./config.json', 'utf8', function (err, data) {
   fileData = JSON.parse(data);
   console.log(fileData);
 });
-// Watches the config file for changes, then re-parses the updated config file
-fs.watch('./config.json', function (event, filename) {
-  console.log('config.json watcher "' + event + '" triggered');
-  fs.readFile('./config.json', 'utf8', function (err, data) {
-    if (err) throw err;
-    console.log('data');
-    fileData = JSON.parse(data);
-
-    // if there is a connectedSocket, it will emit the config event
-    if (typeof connectedSocket != 'undefined')
-    {
-      console.log("Sending the stored data to local-hub");
-      connectedSocket.emit('config', data);
-    }
-  });
+fs.stat('./config.json', function(err, stats){
+  console.log("Config Last Updated At: ");
+  console.log(stats.mtime);
+  configModifiedTime = stats.mtime.getTime();
 });
 
 // Express Routing
@@ -128,6 +118,19 @@ app.post('/config', ensureAuthenticated, function(req, res) {
     console.log(requestBody);
     fs.writeFile('./config.json', requestBody, function (err) {
       if (err) throw err;
+
+      // Send update to local-hub
+      fs.stat('./config.json', function(err, stats){
+        console.log("Config Last Updated At: ");
+        console.log(stats.mtime);
+        configModifiedTime = stats.mtime.getTime();
+      });
+      // if there is a connectedSocket, it will emit the config event
+      if (typeof connectedSocket != 'undefined')
+      {
+        console.log("Sending the stored data to local-hub");
+        connectedSocket.emit('config', { lastModifiedTime: configModifiedTime, data: data});
+      }
       console.log('It\'s saved!');
     });
   });
@@ -206,12 +209,28 @@ function postAuthenticate(socket, data) {
   connectedSocket = socket;
 
   // emit the message containing the data
-  if (typeof fileData != 'undefined')
+  if (typeof fileData != 'undefined' && typeof configModifiedTime != 'undefined')
   {
-    socket.emit('config', JSON.stringify(fileData));
+    socket.emit('config', { lastModifiedTime: configModifiedTime, data: JSON.stringify(fileData)});
   }
 
-  socket.emit("hello", "welcome!");
+  socket.on('config', function(data){
+    console.log('data');
+    console.log(data);
+    console.log('configModifiedTime');
+    console.log(configModifiedTime);
+    console.log('data.lastModifiedTime');
+    console.log(data.lastModifiedTime);
+
+    if(data.lastModifiedTime > configModifiedTime)
+    {
+      console.log("local config is more up to date");
+      fs.writeFile('./config.json', data.data, function (err) {
+        if (err) throw err;
+        console.log('It\'s saved!');
+      });
+    }
+  });
 }
 
 function FindAuthenticateUserInAllowedUsers(username, secret){

@@ -20,9 +20,16 @@ var yourScenariosDictionary = {};
 var runningDevicesDictionary = {};
 var runningScenarios = [];
 
+var configModifiedTime;
+var fileData;
+
 // Loads the scripts/devices from the json file
 var ReadData = function(){
-  var fileData;
+  fs.stat('./config.json', function(err, stats){
+    console.log("Config Last Updated At: ");
+    console.log(stats.mtime);
+    configModifiedTime = stats.mtime.getTime();
+  });
   fs.readFile('./config.json', 'utf8', function (err, data) {
     if (err) throw err;
     fileData = JSON.parse(data);
@@ -56,15 +63,25 @@ socket.on('connect', function(){
 });
 console.log("connection requested");
 
-
 socket.on('config', function(data){
-  //TODO: check the hash of the two files for differences, if there is a difference, then make the change.
   console.log('data');
   console.log(data);
-  fs.writeFile('./config.json', data, function (err) {
-    if (err) throw err;
-    console.log('It\'s saved!');
-  });
+  console.log('configModifiedTime');
+  console.log(configModifiedTime);
+  console.log('data.lastModifiedTime');
+  console.log(data.lastModifiedTime);
+
+  if(data.lastModifiedTime > configModifiedTime)
+  {
+    console.log("server config is more up to date");
+    fs.writeFile('./config.json', data.data, function (err) {
+      if (err) throw err;
+      console.log('It\'s saved!');
+    });
+  }else{
+    console.log("local config is more up to date");
+    socket.emit('config', { lastModifiedTime: configModifiedTime, data: JSON.stringify(fileData)});
+  }
 });
 
 var ClearRunningDictionaries = function(){
