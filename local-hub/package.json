@@ -1,9 +1,10 @@
 {
-  "name": "ohh",
+  "name": "ohh-local-hub",
   "version": "0.0.2",
   "description": "the local hub in a split-hub architecture for the open source home hub",
   "dependencies": {
     "socket.io-client": "1.3.5",
-    "spark": "0.4.2"
+    "spark": "0.4.2",
+    "openzwave": "0.0.33"
   }
 }

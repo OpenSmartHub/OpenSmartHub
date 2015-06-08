@@ -8,3 +8,6 @@ exports.WEBSITE_URL = "http://YOUR_AZURE_WEBSITE.azurewebsites.net";
 exports.SparkUsername = "SPARK_USERNAME";
 exports.SparkPassword = "SPARK_PASSWORD";
 exports.WeatherUndergroundKey = "WEATHER_UNDERGROUND_KEY";
+
+exports.ZSTICK_USBPORT = '/dev/cu.SLAB_USBtoUART'; // for running on MAC
+// exports.ZSTICK_USBPORT = '/dev/ttyUSB0'; // for running on LINUX

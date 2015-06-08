@@ -9,6 +9,7 @@ deviceTypeMap["Wemo"] = require('./devices/Wemo.js');
 deviceTypeMap["SparkButton"] = require('./devices/SparkButton.js');
 deviceTypeMap["WeatherUnderground"] = require("./devices/WeatherUnderground.js");
 deviceTypeMap["SparkMotion"] = require('./devices/SparkMotion.js');
+deviceTypeMap["ZWave"] = require('./devices/ZWaveDevice.js');
 // TODO: Add new device types that you create here
 
 // populated by config file
@@ -174,6 +175,11 @@ var PopulateRunningDictionaries = function()
     if(defaultDevice && deviceTypeMap[type])
     {
       runningDevicesDictionary[nameOfYourDevice] = new deviceTypeMap[type](params);
+    }
+    else if(type.indexOf("ZWave-") === 0) // special check for zwave devices
+    {
+      console.log("ZWave Device Added!");
+      runningDevicesDictionary[nameOfYourDevice] = new deviceTypeMap["ZWave"](params);
     }
   }
   // console.logconsole.log("--------------------------------");
