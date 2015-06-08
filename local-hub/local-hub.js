@@ -10,6 +10,7 @@ deviceTypeMap["SparkButton"] = require('./devices/SparkButton.js');
 deviceTypeMap["WeatherUnderground"] = require("./devices/WeatherUnderground.js");
 deviceTypeMap["SparkMotion"] = require('./devices/SparkMotion.js');
 deviceTypeMap["ZWave"] = require('./devices/ZWaveDevice.js');
+deviceTypeMap["YamahaReceiver"] = require('./devices/YamahaReceiver.js');
 // TODO: Add new device types that you create here
 
 // populated by config file
