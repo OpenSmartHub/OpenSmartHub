@@ -181,21 +181,15 @@
             </div>
             <div id="scenario{{id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
               <div class="panel-body">
-                Trigger: {{scenario.trigger.description}} : 
+                {{scenario.trigger.device}} : {{scenario.trigger.trigger}}
                 <ul>
-                  <li>{{scenario.trigger.device}} : {{scenario.trigger.trigger}}</li>
-                  <ul>
-                    <li ng-repeat="(id, param) in scenario.trigger.params">
-                      ({{id}} : {{param}})
-                    </li>
-                  </ul>
-                <ul>
-                  <li ng-repeat="(id, action) in scenario.actions">{{action.description}}
+                  <li ng-repeat="(id, param) in scenario.trigger.params">
+                    {{id}} : {{param}}
+                  </li>
+                  <li ng-repeat="(id, action) in scenario.actions">
+                    {{action.device}} : {{action.action}}
                     <ul>
-                      <li>{{action.device}} : {{action.action}}</li>
-                      <ul>
-                        <li ng-repeat="(id, param) in action.params">{{id}} : {{param}}</li>
-                      </ul>
+                      <li ng-repeat="(id, param) in action.params">{{id}} : {{param}}</li>
                     </ul>
                   </li>
                 </ul>
