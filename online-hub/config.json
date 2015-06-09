@@ -109,6 +109,52 @@
             },
             "actions": {}
         },
+        "YamahaReceiver": {
+            "params": [
+                "ipAddress"
+            ],
+            "data": {
+                "power": "on/off",
+                "volume": "int",
+                "currentInput": "string"
+            },
+            "triggers": {},
+            "actions": {
+                "powerOff": [
+                    "null"
+                ],
+                "powerOn": [
+                    "null"
+                ],
+                "powerToggle": [
+                    "on/off/both"
+                ],
+                "setVolumeTo": [
+                    "number"
+                ],
+                "volumeUp": [
+                    "number"
+                ],
+                "volumeDown": [
+                    "number"
+                ],
+                "setInputTo": [
+                    "inputName"
+                ],
+                "setInputToPandora": [
+                    "null"
+                ],
+                "setInputToV-AUX": [
+                    "null"
+                ],
+                "setInputToHDMI1": [
+                    "null"
+                ],
+                "setInputToAUDIO1": [
+                    "null"
+                ]
+            }
+        },
         "Test": {
             "params": [
                 "null"
@@ -136,7 +182,6 @@
         {
             "description": "Every 5 seconds say hello after 11pm",
             "trigger": {
-                "description": "Every 5 seconds",
                 "device": "PST Clock",
                 "trigger": "intervalTrigger",
                 "customTrigger": "every5seconds",
@@ -153,7 +198,6 @@
             },
             "actions": [
                 {
-                    "description": "print hello",
                     "device": "TestPrinter",
                     "action": "hello",
                     "params": {
