@@ -79,10 +79,6 @@
                   <label for="name">Choose a Trigger</label>
                   <select class="form-control" ng-model="newScenario.trigger.trigger" ng-options="id as id for (id, trigger) in selectedTriggerDeviceType.triggers" ng-change="setTriggerFunction(newScenario.trigger.trigger)"></select>
                 </div>
-                <div class="form-group">
-                  <label for="customTrigger">Custom Trigger Name</label>
-                  <input type="text" ng-model="newScenario.trigger.customTrigger" class="form-control">
-                </div>
                 <!--
                 Add fields for parameters based on the selection above (dynamically)
                 -->

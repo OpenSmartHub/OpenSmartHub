@@ -85,6 +85,9 @@
           console.log("createScenario");
           console.log(newScenario);
 
+          var d = new Date();
+          newScenario.trigger.customTrigger = d.getTime();
+          
           // re-organize the params into an array instead of dictionary
           // var params = [];
           // for (var temp in newScenario.params)
