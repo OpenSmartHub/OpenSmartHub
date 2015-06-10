@@ -44,10 +44,11 @@ There are other open source automation projects but **the key to the Open source
   * WeMo
   * WeatherUnderground APIs for local astronomical and weather forecasts
   * Clock for time related triggers and data
+  * Z-Wave Devices (With a [USB Z-Wave Adapter](http://amzn.to/1AByX3j))
+  * Yamaha Receivers
 
 ###Near Future:
-  * Any device that can make a HTTP POST call
-  * Any device hooked up to IFTTT
+  * Amazon Echo
 
 Want to see a device supported? You have the power to add it yourself!
 
