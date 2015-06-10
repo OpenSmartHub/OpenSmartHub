@@ -10,9 +10,41 @@
   angular
     .module('ohh')
       .controller('DashboardContentController', ['$scope', 'ConnectionStatus', 'MyJsonService', function($scope, ConnectionStatus, MyJsonService){
-        $scope.connectionStatus = ConnectionStatus.get();
+        $scope.triggerDevices = {};
+        $scope.actionDevices = {};
+        var checkDevices = function(result){
+          // console.log("checkDevices called");
+          // console.log("result:")
+          // console.log(result);
+          $scope.triggerDevices = {};
+          $scope.actionDevices = {};
+          for(deviceName in result.yourDevices)
+          {
+            var device = result.yourDevices[deviceName];
+            var deviceType = result.deviceTypes[device.type];
+            // console.log("info: ");
+            // console.log(deviceName);
+            // console.log(Object.keys(deviceType.triggers).length);
+            // console.log(Object.keys(deviceType.actions).length);
+            if(Object.keys(deviceType.triggers).length > 0)
+            {
+              $scope.triggerDevices[deviceName] = device;
+            }
 
-        $scope.storage = MyJsonService.get();
+            if(Object.keys(deviceType.actions).length > 0)
+            {
+              $scope.actionDevices[deviceName] = device;
+            }
+          }
+          // console.log("triggerDevices");
+          // console.log($scope.triggerDevices);
+          // console.log("actionDevices");
+          // console.log($scope.actionDevices);
+        };
+
+        $scope.connectionStatus = ConnectionStatus.get();
+        $scope.storage = MyJsonService.get(checkDevices);
+
         $scope.newScenario = {};
         $scope.selectedTriggerDeviceTriggersLength = 0;
         $scope.selectedActionDeviceActionsLength = 0;
@@ -87,14 +119,6 @@
 
           var d = new Date();
           newScenario.trigger.customTrigger = d.getTime();
-          
-          // re-organize the params into an array instead of dictionary
-          // var params = [];
-          // for (var temp in newScenario.params)
-          // {
-          //   params.push(newScenario.params[temp]);
-          // }
-          // newScenario.params = params;
 
           $scope.storage.yourScenarios.push(newScenario);
           console.log($scope.storage.yourScenarios);
@@ -131,6 +155,7 @@
           $scope.storage.$save();
           $scope.newDevice = {};
           $scope.newDeviceName = "";
+          checkDevices();
         };
 
         // removing a script
