@@ -3,4 +3,4 @@
 	url = https://github.com/anthony-ngu/node-upnp-controlpoint.git
 [submodule "local-hub/devices/wemo"]
 	path = local-hub/devices/wemo
-	url = https://github.com/anthony-ngu/node-upnp-controlpoint.git
+url=https://github.com/OpenSmartHub/node-upnp-controlpoint.git
