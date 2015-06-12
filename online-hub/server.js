@@ -136,6 +136,21 @@ app.post('/config', ensureAuthenticated, function(req, res) {
   });
 });
 
+app.post('/api/buttons', ensureAuthenticated, function(req, res){
+  // console.log("received request");
+  var requestBody = "";
+  req.on('data', function(data){
+    // requestBody+=data;
+    var jsonData = JSON.parse(data);
+    // console.log(jsonData.buttonId);
+    if (typeof connectedSocket != 'undefined')
+    {
+      // console.log("Sending the button data to local-hub");
+      connectedSocket.emit('buttonCalled', { buttonId: jsonData.buttonId, button: jsonData.button});
+    }
+  });
+});
+
 app.get('/connection_status', ensureAuthenticated, function(req, res){
   var connectionData = {
       "connection": connectionEstablished
@@ -152,6 +167,10 @@ app.get('/auth/github/callback',
 
 app.get('/', ensureAuthenticated, function(req, res){
   res.render('index', { user: req.user });
+});
+
+app.get('/dashboard', ensureAuthenticated, function(req, res){
+  res.render('dashboard', { user: req.user });
 });
 
 app.get('/login', function(req, res){
