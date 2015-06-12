@@ -17,6 +17,7 @@ deviceTypeMap["YamahaReceiver"] = require('./devices/YamahaReceiver.js');
 var deviceTypeDictionary = {};
 var yourDevicesDictionary = {};
 var yourScenariosDictionary = {};
+var yourButtonsDictionary = {};
 
 // populated using the config file and our parsing mechanism
 var runningDevicesDictionary = {};
@@ -40,6 +41,7 @@ var ReadData = function(){
     deviceTypeDictionary = fileData.deviceTypes;
     yourDevicesDictionary = fileData.yourDevices;
     yourScenariosDictionary = fileData.yourScenarios;
+    yourButtonsDictionary = fileData.yourButtons;
     // console.log("deviceTypeDictionary-----------------");
     // console.log(deviceTypeDictionary);
     // console.log("yourDevicesDictionary-----------------");
@@ -86,6 +88,29 @@ socket.on('config', function(data){
   }
 });
 
+socket.on('buttonCalled', function(data){
+  // console.log('data');
+  // console.log(data);
+  var id = data.buttonId;
+  // console.log(id)
+  var button = data.button;
+  console.log(button);
+  // for each action, parse it and do it
+  for (var actionId in button)
+  {
+    var action = button[actionId];
+
+    // console.log(action.device);
+    // console.log(action.action);
+    // console.log(action.params);
+    
+    var deviceName = action.device;
+    var actionFunction = action.action;
+    var params = action.params;
+    var device = runningDevicesDictionary[deviceName];
+    device[actionFunction](params);
+  }
+})
 var ClearRunningDictionaries = function(){
   // removes all the listeners for the specific triggerNames
   for (var deviceName in runningDevicesDictionary) {
