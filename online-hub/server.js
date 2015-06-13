@@ -120,11 +120,7 @@ app.post('/config', ensureAuthenticated, function(req, res) {
       if (err) throw err;
 
       // Send update to local-hub
-      fs.stat('./config.json', function(err, stats){
-        console.log("Config Last Updated At: ");
-        console.log(stats.mtime);
-        configModifiedTime = stats.mtime.getTime();
-      });
+      configModifiedTime = new Date().getTime();
       // if there is a connectedSocket, it will emit the config event
       if (typeof connectedSocket != 'undefined')
       {
