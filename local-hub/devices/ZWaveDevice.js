@@ -31,9 +31,10 @@ function ZWaveDevice(params) {
   this.data["batterylevel"] = "0"
 
   zwaveController.on('scan complete', function() {
+    console.log("scan complete");
     if(!self.zwaveDevice && self.nodeid) // to prevent repetitive device registrations
     {
-      // console.log("-------zwave-devices-------");
+      console.log("-------zwave-devices-------");
       // for (var tempDevice in nodes) // finds all the devices on your network
       // {
       //   console.log(nodes[tempDevice]);
@@ -56,15 +57,26 @@ function ZWaveDevice(params) {
     console.log("---------searchIntervalCalled----------");
     console.log("zwaveDevice: ");
     console.log(self.zwaveDevice);
-    if(!self.zwaveDevice)
+    if(!self.zwaveDevice && self.nodeid) // to prevent repetitive device registrations
     {
       zwaveController.connect();
+
+      // this is for the case that it is a reset ('scan complete won't get called again)
+      if(nodes[self.nodeid])
+      {
+        self.zwaveDevice = nodes[self.nodeid];
+        console.log("device found");
+        self.emit("deviceFound");
+      }
     }else{
       clearInterval(zWaveSearchInterval);
     }
   }, 5000);
 
   this.dispose = function(){
+    clearInterval(zWaveSearchInterval);
+    self.removeAllListeners();
+    zwaveController.removeAllListeners();
   };
 
   // Value Handlers

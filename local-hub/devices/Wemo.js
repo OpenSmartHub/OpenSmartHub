@@ -9,6 +9,7 @@
         "toggledTrigger":["on/off/both"]
       },
       "actions":{
+        "Toggle":["on/off/both"],
         "timedToggle":["on/off/both","milliseconds"]
       }
     }
@@ -66,15 +67,50 @@ function Wemo(params) {
   });
 
   var cpSearchInterval= setInterval(function(){
+    console.log("---------searchIntervalCalled----------");
+    console.log("wemoDevice: ");
+    console.log(self.wemoDevice);
     if(!self.wemoDevice)
     {
       cp.search();
+
+      // this is for the case that it is a reset ('scan complete won't get called again)
+      for (var tempDevice in cp.devices) // finds all the devices on your network
+      {
+        console.log(cp.devices[tempDevice].friendlyName);
+        if(cp.devices[tempDevice].friendlyName == self.name && // checks whether or not it has the correct device name
+        cp.devices[tempDevice].deviceType == wemoStructure.WemoControllee.deviceType) // This checks to see if it is a switch
+        {
+          self.wemoDevice = new wemoStructure.WemoControllee(cp.devices[tempDevice]); // handle to the wemo device you specified
+
+          self.wemoDevice.eventService.on("stateChange", function(value)
+          {
+            if (value["BinaryState"] == "1")
+            { 
+              self.data.state = "on";
+            }
+            else if (value["BinaryState"] == "0")
+            {
+              self.data.state = "off";
+            }
+          });
+
+          console.log("device found");
+          self.emit("deviceFound");
+        }
+      }
     }else{
       clearInterval(cpSearchInterval);
     }
   }, 5000);
 
   this.dispose = function(){
+    clearInterval(cpSearchInterval);
+    self.removeAllListeners();
+    if(self.wemoDevice && self.wemoDevice.eventService)
+    {
+      self.wemoDevice.eventService.removeAllListeners();
+    }
   };
 };
 
@@ -112,6 +148,12 @@ Wemo.prototype.toggledTrigger = function(customName, params){
       });
     }
   });
+};
+
+Wemo.prototype.Toggle = function(params){
+  var self = this;
+  params["milliseconds"] = 0;
+  self.timedToggle(params);
 };
 
 Wemo.prototype.timedToggle = function(params){
