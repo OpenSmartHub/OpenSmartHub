@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard</title>
-  <link rel="stylesheet" href="style.css">
+
   <link rel="stylesheet" href="font-awesome.min.css">
   
   <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -14,7 +14,7 @@
   <script src="ohh-angular.js"></script>
 </head>
 <body ng-controller="DashboardContentController as dashboardContentController">
-  <nav class="navbar navbar-inverse navbar-fixed-top">
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -35,15 +35,15 @@
 
   <div class="container">
     <div ng-if="connectionStatus.connection">Connection Status: ON</div><div ng-if="!connectionStatus.connection">Connection Status: OFF</div>
-    <div id="yourDashboard" class="col-md-12 black-border full-size">
-      <button class="btn btn-default rounded-div black-border thumbnail-square" ng-repeat="(id, device) in actionDevices track by $index" data-toggle="modal" data-target="#callActionModal" ng-click="setActionDevice(id)">
+    <div id="yourDashboard" class="col-xs-12 col-sm-12 col-md-12 black-border">
+      <button class="btn btn-default rounded-div thumbnail-square col-sm-12 col-xs-12 col-md-4" ng-repeat="(id, device) in actionDevices track by $index" data-toggle="modal" data-target="#callActionModal" ng-click="setActionDevice(id)">
         {{id}}
       </button>
-      <button class="btn btn-primary rounded-div black-border thumbnail-square" ng-repeat="(id, button) in storage.yourButtons track by $index" ng-click="callButton(id)">
+      <button class="btn btn-primary rounded-div thumbnail-square col-sm-12 col-xs-12 col-md-4" ng-repeat="(id, button) in storage.yourButtons track by $index" ng-click="callButton(id)">
         {{id}}
-        <div class="btn btn-default" ng-click="deleteButton(id)"><i class="fa fa-times"></i></div>
+        <div class="btn btn-default pull-right" ng-click="deleteButton(id)"><i class="fa fa-times"></i></div>
       </button>
-      <button class="btn btn-success rounded-div black-border col-md-1 thumbnail-square" data-toggle="modal" data-target="#newButtonModal">
+      <button class="btn btn-success rounded-div thumbnail-square col-sm-12 col-xs-12 col-md-4" data-toggle="modal" data-target="#newButtonModal">
         <i class="fa fa-plus fa-2x"></i>
       </button>
     </div>
@@ -128,9 +128,6 @@
   </div><!-- /.container -->
 
   <script>
-    // Resizes the two scrollable windows
-    $('#yourDashboard').css('height', $(window).height()-75);
-
     // blocks the enter and back key presses when in an input
     $(function(){
      var keyStop = {
@@ -154,5 +151,6 @@
 
   <!-- Optional theme -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="style.css">
 </body>
 </html>

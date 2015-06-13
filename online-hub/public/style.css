@@ -75,3 +75,9 @@ body {
   margin-left: 5px;
   margin-right: 5px;
 }
+
+@media (min-width: 768px){
+  .container {
+    width: auto;
+  }
+}
