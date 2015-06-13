@@ -297,7 +297,7 @@
           var id = ""
           var temp = [];
           temp.push(action);
-          $http.post('/api/buttons', {buttonId:id, button:temp}).
+          $http.post('/api/actions', {actions:temp}).
             success(function(data, status, headers, config) {
               // this callback will be called asynchronously
               // when the response is available
@@ -314,7 +314,7 @@
           console.log("id");
           console.log(id);
 
-          $http.post('/api/buttons', {buttonId:id, button:$scope.storage.yourButtons[id]}).
+          $http.post('/api/actions', {actions:$scope.storage.yourButtons[id]}).
             success(function(data, status, headers, config) {
               // this callback will be called asynchronously
               // when the response is available

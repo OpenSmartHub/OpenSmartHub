@@ -132,17 +132,16 @@ app.post('/config', ensureAuthenticated, function(req, res) {
   });
 });
 
-app.post('/api/buttons', ensureAuthenticated, function(req, res){
+app.post('/api/actions', ensureAuthenticated, function(req, res){
   // console.log("received request");
   var requestBody = "";
   req.on('data', function(data){
     // requestBody+=data;
     var jsonData = JSON.parse(data);
-    // console.log(jsonData.buttonId);
     if (typeof connectedSocket != 'undefined')
     {
-      // console.log("Sending the button data to local-hub");
-      connectedSocket.emit('buttonCalled', { buttonId: jsonData.buttonId, button: jsonData.button});
+      // console.log("Sending the actions data to local-hub");
+      connectedSocket.emit('actionsCalled', { actions: jsonData.actions});
     }
   });
 });

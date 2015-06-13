@@ -88,17 +88,15 @@ socket.on('config', function(data){
   }
 });
 
-socket.on('buttonCalled', function(data){
-  // console.log('data');
+socket.on('actionsCalled', function(data){
+  console.log('data');
   // console.log(data);
-  var id = data.buttonId;
-  // console.log(id)
-  var button = data.button;
-  console.log(button);
+  var actions = data.actions;
+  // console.log(actions);
   // for each action, parse it and do it
-  for (var actionId in button)
+  for (var actionId in actions)
   {
-    var action = button[actionId];
+    var action = actions[actionId];
 
     // console.log(action.device);
     // console.log(action.action);
