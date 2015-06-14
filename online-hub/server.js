@@ -133,7 +133,7 @@ app.post('/config', ensureAuthenticated, function(req, res) {
 });
 
 app.post('/api/actions', ensureAuthenticated, function(req, res){
-  // console.log("received request");
+  console.log("received request");
   var requestBody = "";
   req.on('data', function(data){
     // requestBody+=data;
@@ -143,6 +143,10 @@ app.post('/api/actions', ensureAuthenticated, function(req, res){
       // console.log("Sending the actions data to local-hub");
       connectedSocket.emit('actionsCalled', { actions: jsonData.actions});
     }
+
+    // This will close the connection and remove keep-alive
+    res.set('Connection', 'close');
+    res.send();
   });
 });
 
