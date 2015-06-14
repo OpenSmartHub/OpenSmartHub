@@ -26,15 +26,10 @@ There are three main components:
 0. Your website should now be operational!
 0. Feel free to customize the login page to your own design whims.
 
-##Setup the Local-Hub
+##Setup the Local-Hub (RPi2 instructions [here](GetStartedOnRPi2.md))
 0. Install Nodejs v0.10.28 on your local-hub machine
 0. Place the local-hub folder on the machine
 0. Open up a terminal or command line window
-0. If you are placing the local-hub on a Raspberry Pi, you will need to install a couple more dev tools in order to build a couple of the node modules. Run these commands:
-  ```
-  sudo apt-get install subversion libudev-dev make build-essential git-core python2.7 pkg-config libssl-dev
-  sudo -i npm install node-gyp
-  ```
 0. If you are on a Mac or Linux machine run `sh install.sh`, if you are on a PC run `install.bat`. This will install the node modules needed in all the right places and rename `public_securityCredentials.js` to `securityCredentials.js`.
 0. Update `securityCredentials.js` with your own information
   * The contents of this file are used to connect to the various services / devices.
