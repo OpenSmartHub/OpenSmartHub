@@ -6,6 +6,7 @@
     "socket.io-client": "1.3.5",
     "spark": "0.4.2",
     "openzwave": "0.0.33",
-    "yamaha-nodejs":"0.4.3"
+    "yamaha-nodejs":"0.4.3",
+    "lodash.isequal":"3.0.4"
   }
 }

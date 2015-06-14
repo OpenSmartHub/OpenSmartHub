@@ -1,6 +1,7 @@
 var io = require('socket.io-client');
 var fs = require('fs');
 var securityCredentials = require('./securityCredentials.js');
+var isEqual = require('lodash.isequal'); // for comparison of JSON objects
 
 var deviceTypeMap = {};
 deviceTypeMap["Test"] = require('./devices/Test.js');
@@ -38,19 +39,26 @@ var ReadData = function(){
     fileData = JSON.parse(data);
     // console.log(fileData);
 
-    deviceTypeDictionary = fileData.deviceTypes;
-    yourDevicesDictionary = fileData.yourDevices;
-    yourScenariosDictionary = fileData.yourScenarios;
-    yourButtonsDictionary = fileData.yourButtons;
-    // console.log("deviceTypeDictionary-----------------");
-    // console.log(deviceTypeDictionary);
-    // console.log("yourDevicesDictionary-----------------");
-    // console.log(yourDevicesDictionary);
-    // console.log("yourScenariosDictionary-----------------");
-    // console.log(yourScenariosDictionary);
+    // Checks the changes. If it has not affected the deviceTypes, devices, or Scenario, don't do anything
+    if(!(isEqual(deviceTypeDictionary, fileData.deviceTypes) &&
+    isEqual(yourDevicesDictionary, fileData.yourDevices) &&
+    isEqual(yourScenariosDictionary, fileData.yourScenarios)))
+    {
+      deviceTypeDictionary = fileData.deviceTypes;
+      yourDevicesDictionary = fileData.yourDevices;
+      yourScenariosDictionary = fileData.yourScenarios;
+      yourButtonsDictionary = fileData.yourButtons;
 
-    ClearRunningDictionaries();
-    PopulateRunningDictionaries();
+      // console.log("deviceTypeDictionary-----------------");
+      // console.log(deviceTypeDictionary);
+      // console.log("yourDevicesDictionary-----------------");
+      // console.log(yourDevicesDictionary);
+      // console.log("yourScenariosDictionary-----------------");
+      // console.log(yourScenariosDictionary);
+
+      ClearRunningDictionaries();
+      PopulateRunningDictionaries();
+    }
   });
 };
 ReadData();
