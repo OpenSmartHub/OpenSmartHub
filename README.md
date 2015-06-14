@@ -6,7 +6,7 @@
 * [Supported Devices](#supported-devices)
 * [Device Creation Guidelines](DeviceCreationGuidelines.md)
 * [Gritty Details](#gritty-details)
-* [The Future](#the-future)
+* [Version History](VersionHistory.md)
 * [Links to Supporting Modules](#links-to-supporting-modules)
 
 ##One hub to rule them all
@@ -105,11 +105,7 @@ Want to see a device supported? You have the power to add it yourself!
 
 Triggers can be made using a on("event") with a check inside (if statement that emits an event of special-naming when it is valid)
 
-##The Future
-* **Community Growth! The more people that automate devices based on the hub and come up with recipes, the more robust the functionality will be!**
-* Tie into nest api as a device or get their temperature settings, wemo, or smart things systems.
-* Create an app that will act as another device and link to your hub and automatically turn on security mode when you are away.
-* Get data from multiple spark cores like temperature in your house or motion and toggle multiple devices based off of spark too.
+##[Version History](VersionHistory.md)
 
 ##Links to Supporting Modules
 
