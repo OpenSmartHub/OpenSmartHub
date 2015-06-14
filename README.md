@@ -59,30 +59,32 @@ Want to see a device supported? You have the power to add it yourself!
 ###Config File contains:
 
   **Device Type Library** - [Dictionary]
-
+    
+    Name of type - [String]
     Device Type - [Object]
-      * Name of type - [String]
       * Array of Parameter Types for creation - (Array of strings in order with int-, double-, bool-, etc. prefixed)
+      * Data - [Dictionary]
+        * Data -> {"name":"type"}
       * Triggers - [Dictionary]
-        * Trigger -> {name:"",params:[]}
+        * Trigger -> {"name":[params]}
       * Actions - [Dictionary]
-        * Action -> {name:"",params:[]}
+        * Action -> {"name":[params]}
 
   **Your Devices** - [Dictionary]
-
+  
+    Name your device - [String]
     Device - [Object]
-      * Name your device - [String]
       * Device Type - [String] -> Links to an entry in the Device Type Library
-      * Array of parameters for creation of device (in order) - [Array of strings of values]
+      * Dictionary of parameters for creation of device (keys match the param types in the DeviceType)
 
-  **Your Scenarios** - [Dictionary]
+  **Your Scenarios** - [Array]
 
     Scenario - [Object]
-      * Name of scenario - [String]
+      * Description of Scenario - [String]
       * Trigger - [A single Trigger structure](Future: multiple triggers together)
-        * Trigger: {description: "ScenarioTriggerDescription", device: "deviceName", trigger:"triggerName", customTrigger:"customTriggerName" params:[]}
+        * Trigger: {device: "deviceName", trigger:"triggerName", customTrigger:"customTriggerName" params:{}}
       * List of Actions to perform - [Array of Action structures]
-        * Action: {description:"ScenarioActionDescription", device: "deviceName", action: "actionName", params:[]}
+        * Action: {device: "deviceName", action: "actionName", params:{}}
 
 ###The result of the creation process using the config file above:
   **Running Devices:** Dictionary of your devices
