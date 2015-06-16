@@ -122,7 +122,7 @@ app.post('/config', ensureAuthenticated, function(req, res) {
       // Send update to local-hub
       configModifiedTime = new Date().getTime();
       // if there is a connectedSocket, it will emit the config event
-      if (typeof connectedSocket != 'undefined')
+      if (connectedSocket)
       {
         console.log("Sending the stored data to local-hub");
         connectedSocket.emit('config', { lastModifiedTime: configModifiedTime, data: data});
@@ -138,7 +138,7 @@ app.post('/api/actions', ensureAuthenticated, function(req, res){
   req.on('data', function(data){
     // requestBody+=data;
     var jsonData = JSON.parse(data);
-    if (typeof connectedSocket != 'undefined')
+    if (connectedSocket)
     {
       // console.log("Sending the actions data to local-hub");
       connectedSocket.emit('actionsCalled', { actions: jsonData.actions});
@@ -271,6 +271,10 @@ io.on('connection', function (socket) {
 
   socket.on('disconnect',function(){
     console.log('client has disconnected');
-    connectionEstablished = false;
+    if(connectedSocket == socket)
+    {
+      connectedSocket = null;
+      connectionEstablished = false;
+    }
   });
 });
