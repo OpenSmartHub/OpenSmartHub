@@ -2,7 +2,7 @@
   angular
     .module('ohh', ['ngResource']);
   angular.module('ohh').factory('MyJsonService', ['$resource', function($resource) {
-    return $resource('/config');
+    return $resource('/api/config');
   }]);
   angular.module('ohh').factory('ConnectionStatus', ['$resource', function($resource){
     return $resource('/connection_status');

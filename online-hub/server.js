@@ -104,17 +104,20 @@ app.use(express.static(__dirname + '/public'));
 app.engine('html', require('ejs').renderFile);
 
 // Handles Retrieval of the json file
-app.get('/config', ensureAuthenticated, function(req, res) {
+app.get('/api/config', ensureAuthenticated, function(req, res) {
   //console.log(req);
   res.send(fileData);
 });
 
 // Handles updates to the json file
-app.post('/config', ensureAuthenticated, function(req, res) {
+app.post('/api/config', ensureAuthenticated, function(req, res) {
   var requestBody = "";
   req.on('data', function(data) {
     requestBody += data;
-    fileData = JSON.parse(data);
+  });
+
+  req.on('end', function() {
+    fileData = JSON.parse(requestBody);
     console.log(requestBody);
     fs.writeFile('./config.json', requestBody, function (err) {
       if (err) throw err;
@@ -125,10 +128,14 @@ app.post('/config', ensureAuthenticated, function(req, res) {
       if (connectedSocket)
       {
         console.log("Sending the stored data to local-hub");
-        connectedSocket.emit('config', { lastModifiedTime: configModifiedTime, data: data});
+        connectedSocket.emit('config', { lastModifiedTime: configModifiedTime, data: requestBody});
       }
       console.log('It\'s saved!');
     });
+
+    // This will close the connection and remove keep-alive
+    res.set('Connection', 'close');
+    res.send();
   });
 });
 
@@ -136,8 +143,10 @@ app.post('/api/actions', ensureAuthenticated, function(req, res){
   console.log("received request");
   var requestBody = "";
   req.on('data', function(data){
-    // requestBody+=data;
-    var jsonData = JSON.parse(data);
+    requestBody+=data;
+  });
+  req.on('end', function(){
+    var jsonData = JSON.parse(requestBody);
     if (connectedSocket)
     {
       // console.log("Sending the actions data to local-hub");
