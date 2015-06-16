@@ -68,11 +68,21 @@ fs.watch('./config.json', function (event, filename) {
   ReadData();
 });
 
-socket = io.connect(securityCredentials.WEBSITE_URL);
+socket = io.connect(securityCredentials.WEBSITE_URL, {reconnection: true, reconnectionAttempts: Infinity, autoConnect: true});
 
 socket.on('connect', function(){
+  console.log('connecting..');
   socket.emit('authentication', {username: securityCredentials.USERACCOUNT_NAME, secret: securityCredentials.USERACCOUNT_KEY});
 });
+
+socket.on('disconnect', function(){
+  console.log('socket disconnected');
+});
+
+socket.on('reconnecting', function(number){
+  console.log('reconnecting attempt ' + number);
+});
+
 console.log("connection requested");
 
 socket.on('config', function(data){
