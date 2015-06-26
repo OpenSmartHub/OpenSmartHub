@@ -1,4 +1,4 @@
-#Open source Home Hub
+#OpenSmartHub
 
 * [Introduction](#one-hub-to-rule-them-all)
 * [How It Works](#how-it-works)
@@ -13,9 +13,9 @@
 
 Home automation is a growing space and every device has it's own way to interact with it. This allows you combine them, make new ones and let your home handle itself based on your preferences automatically.
 
-Imagine this you're sitting at home on your sofa and it gets way too warm due to the afternoon sun shining through your window. No need to get up, because your window begins to open by itself in order to cool it down. An hour later it starts to drizzle (a summer storm) but luckily your home hub knew that would happen and it closed your windows for you!
+Imagine this you're sitting at home on your sofa and it gets way too warm due to the afternoon sun shining through your window. No need to get up, because your window begins to open by itself in order to cool it down. An hour later it starts to drizzle (a summer storm) but luckily your smart hub knew that would happen and it closed your windows for you!
 
-That's just one example of what the Home Hub could do for you. The great thing about it is that you can add any device to be automated through the hub! Imagine automating your home lighting, water heaters, sprinklers, etc. based on your movement, usage, time of day, and weather. Your regular home can now become a smart home!
+That's just one example of what the OpenSmartHub could do for you. The great thing about it is that you can add any device to be automated through the hub! Imagine automating your home lighting, water heaters, sprinklers, etc. based on your movement, usage, time of day, and weather. Your regular home can now become a smart home!
 
 ##How it works
 It uses Azure Websites, a local hub device (can be anything that runs Node.js), any of your smarthome or self-made devices, and WeatherUnderground API.
@@ -33,7 +33,7 @@ It uses Azure Websites, a local hub device (can be anything that runs Node.js), 
 * These are your smart home devices. They can be anything from a NEST thermostat, WeMo switches, SmartThings devices, or even your own self-made projects.
 
 ###How is it different?
-There are other open source automation projects but **the key to the Open source Home Hub is that it is designed to be simple yet you can control every part! Easily follow step by step directions to get it set up and contribute!**
+There are other open source automation projects but **the key to the OpenSmartHub is that it is designed to be simple yet you can control every part! Easily follow step by step directions to get it set up and contribute!**
 
 ##[Get Started Using It](GetStartedUsing.md)
 
