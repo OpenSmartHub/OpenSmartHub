@@ -6,24 +6,19 @@ There are three main components:
 * Local-hub : A device hosts the local-hub and will act as the brain for the whole automation hub. This portion lives in your home and is always running.
 * Your devices : these are the components that will interact through the hub.
 
-##Setup the Online-Hub
-0. If you have a way of creating and hosting a Node.js website established already, skip steps 2 and 3.
-0. If not, create an Azure account if you don't have one already, they offer a [free trial](http://azure.microsoft.com/en-us/pricing/free-trial/)
-0. Create a new website that will act as the `online-hub`.
-  * In Azure, you will want to create a new Web App with a url that you can remember
+##Setup the Online-Hub (Azure instructions [here](AzureInstructions.md))
+0. Place the online-hub folder on your machine
 0. To use the online-hub straight out of the box, create a [new Github application](https://github.com/settings/applications/new). Take note of the `Client ID` and `Client Secret` you will need this for later.
-  * You will need to enter the newly created website url as the `Homepage URL`.
-  * You will need to enter the newly created website url with an appended `/auth/github/callback` as the `Authorization callback URL`
+  * You will need to enter `http://localhost:3000` as the `Homepage URL`.
+  * You will need to enter `http://localhost:3000/auth/github/callback` as the `Authorization callback URL`
   * If you do not have a Github account, please [sign up for one](https://github.com/join).
-0. You can now FTP into the server hosting your new website.
-0. On your development machine, download the online-hub folder.
-0. Rename `public_securityCredentials.js` to `securityCredentials.js` and update it's contents with your own information
+0. If you are on a Mac or Linux machine run `sh install.sh`, if you are on a PC run `install.bat`. This will install the node modules needed in all the right places and rename `public_securityCredentials.js` to `securityCredentials.js`.
+0. Update `securityCredentials.js` with your own information
   * Enter the Github `Client ID` and `Client Secret` from earlier.
-  * Add your github username in the allowed users and a custom secret. If you want to add more than one, add another user.
   * Add a custom session secret that is used by the online-hub to save session data.
-  * Add your website's url instead of `http://YOUR_AZURE_WEBSITE.azurewebsites.net` for the CALLBACK_URL.
-0. Using FTP, place the contents of the online-hub folder in the `wwwroot` of your website server.
-0. Your website should now be operational!
+  * Add `http://localhost:3000/auth/github/callback` for the CALLBACK_URL.
+  * Add your github username in the allowed users and a custom secret. If you want to add more than one, add another user.
+0. Your website should now be operational and viewable at `http://localhost:3000`!
 0. Feel free to customize the login page to your own design whims.
 
 ##Setup the Local-Hub (RPi2 instructions [here](GetStartedOnRPi2.md))
